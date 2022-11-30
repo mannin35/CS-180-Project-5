@@ -30,4 +30,8 @@ public class ConversationManager {
         conversations.put(filename, conversation);
     }
 
+    public void setConversation(String filename, ArrayList<Message> newConversation) {
+        conversations.put(filename, newConversation);
+    }
+
 }
