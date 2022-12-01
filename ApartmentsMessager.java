@@ -177,8 +177,7 @@ public class ApartmentsMessager {
                         while (mainMenu) {
                             main.recipient = null;
                             String menuChoice = ServerProcessser.sendOptions(writer, reader, "What would you like to do?",
-                                    new String[]{"Search for a buyer to message", "Create a store", "Block a user", "Become invisible to a user"
-                                            , "Quit"});
+                                    new String[]{"Search for a buyer to message", "Create a store", "Block a user", "Become invisible to a user"});
                             //Find user to message
                             if (menuChoice.equals("1")) {
                                 if (main.buyers.size() == 0) {
@@ -189,7 +188,7 @@ public class ApartmentsMessager {
                                     //loops until user successfully chooses a person to message
                                     while (main.recipient == null && !buyerSearch.equals("3")) {
                                         buyerSearch = ServerProcessser.sendOptions(writer, reader, "Would you like to:",
-                                                new String[]{"See list of buyers", "Search for a buyer", "Quit"});
+                                                new String[]{"See list of buyers", "Search for a buyer"});
                                         if (buyerSearch.equals("1")) {
                                             String buyerList = "";
                                             for (int i = 0; i < main.buyers.size() - 1; i++) {
@@ -231,7 +230,7 @@ public class ApartmentsMessager {
                                                 main.recipient = null;
                                             }
 
-                                        } else if (buyerSearch.equals("3")) {
+                                        } else if (buyerSearch.equals("0")) {
                                             break;
                                         } else {
                                             ServerProcessser.sendMessage(writer, "Please choose a number from the menu to proceed.",
@@ -256,7 +255,7 @@ public class ApartmentsMessager {
                                                     "Would you like to:", new String[]{"View message history",
                                                             "Send a new message", "Edit a message",
                                                             "Delete a message", "Export message history",
-                                                            "Go back to the Main Menu", "Quit"});
+                                                            "Go back to the Main Menu"});
                                             //Prints out message history of user
                                             if (messageMenuChoice.equals("1")) {
                                                 String messageHistory = "";
@@ -392,7 +391,7 @@ public class ApartmentsMessager {
                                                 ServerProcessser.sendMessage(writer, "Conversation exported successfully!", JOptionPane.INFORMATION_MESSAGE);
                                             } else if (messageMenuChoice.equals("6")) {
                                                 break;
-                                            } else if (messageMenuChoice.equals("7")) {
+                                            } else if (messageMenuChoice.equals("0")) {
                                                 mainMenu = false;
                                                 break;
                                             } else {
@@ -450,7 +449,7 @@ public class ApartmentsMessager {
                                     }
                                 }
                                 //quit
-                            } else if (menuChoice.equals("5")) {
+                            } else if (menuChoice.equals("0")) {
                                 break;
                             } else {
                                 ServerProcessser.sendMessage(writer, "Please choose a number from the menu to proceed.", JOptionPane.WARNING_MESSAGE);
