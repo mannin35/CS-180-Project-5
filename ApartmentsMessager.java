@@ -160,8 +160,8 @@ public class ApartmentsMessager {
                     }
                 }
                 if (loggedIn) {
-                    ServerProcessser.sendMessage(writer, "You are now logged in as ",
-                            JOptionPane.INFORMATION_MESSAGE);
+                    ServerProcessser.sendMessage(writer, "You are now logged in as "
+                                    + main.current.getUsername(), JOptionPane.INFORMATION_MESSAGE);
                     //logged in as seller
                     if (main.current.isSeller()) {
                         //removes buyers who chose to be invisible to currently logged in seller from list of buyers
