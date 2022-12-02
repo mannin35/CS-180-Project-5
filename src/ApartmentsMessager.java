@@ -26,6 +26,8 @@ public class ApartmentsMessager {
     private User current;
     private User recipient;
 
+    private static int threadNumber = 1234;
+
     public ApartmentsMessager() {
         currentConvo = new ArrayList<Message>();
         recipientConvo = new ArrayList<Message>();
@@ -57,8 +59,8 @@ public class ApartmentsMessager {
                 BufferedReader readerOriginal = new BufferedReader(new InputStreamReader(socketOriginal.getInputStream()));
                 PrintWriter writerOriginal = new PrintWriter(socketOriginal.getOutputStream());
 
-                writerOriginal.println(1234 + Thread.activeCount());
-                System.out.println(1234 + Thread.activeCount());
+                writerOriginal.println(++threadNumber);
+                System.out.println(threadNumber);
                 writerOriginal.flush();
 
             /*
@@ -68,8 +70,8 @@ public class ApartmentsMessager {
             4. Client closes connection with port 4242
              */
 
-                server = new ServerSocket(1234 + Thread.activeCount());
-                System.out.println(1234 + Thread.activeCount());
+                server = new ServerSocket(threadNumber);
+                System.out.println(threadNumber);
 
                 // socket object to receive incoming client
                 // requests
@@ -89,6 +91,7 @@ public class ApartmentsMessager {
                 // This thread will handle the client
                 // separately
                 new Thread(clientSock).start();
+                serverSocketOriginal.close();
             }
         } catch (IOException e) {
             e.printStackTrace();
