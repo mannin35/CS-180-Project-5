@@ -153,7 +153,7 @@ public class ApartmentsMessager {
                 
                 if (loggedIn) {
                     ServerProcessor.sendMessage(writer, "You are now logged in as "
-                            + main.current.getUsername(), JOptionPane.INFORMATION_MESSAGE);
+                            + main.current.getUsername(), JOptionPane.PLAIN_MESSAGE);
                     //logged in as seller
                     if (main.current.isSeller()) {
                         //removes buyers who chose to be invisible to currently logged in seller from list of buyers
@@ -168,8 +168,12 @@ public class ApartmentsMessager {
                         boolean mainMenu = true;
                         while (mainMenu) {
                             main.recipient = null;
-                            String menuChoice = ServerProcessor.sendOptions(writer, reader, "What would you like to do?",
-                                    new String[]{"Search for a buyer to message", "Create a store", "Block a user", "Become invisible to a user"});
+                            String menuChoice = ServerProcessor.sendOptions(writer, reader, "What would you like to do" +
+                                            "\n1. Search for a buyer to message" +
+                                            "\n2. Create a store" +
+                                            "\n3. Block a user" +
+                                            "\n\"4. Become invisible to a user",
+                                    new String[]{"1", "2", "3", "4"});
                             //Find user to message
                             if (menuChoice.equals("1")) {
                                 if (main.buyers.size() == 0) {
@@ -179,8 +183,10 @@ public class ApartmentsMessager {
                                     String buyerSearch = "";
                                     //loops until user successfully chooses a person to message
                                     while (main.recipient == null && !buyerSearch.equals("3")) {
-                                        buyerSearch = ServerProcessor.sendOptions(writer, reader, "Would you like to:",
-                                                new String[]{"See list of buyers", "Search for a buyer"});
+                                        buyerSearch = ServerProcessor.sendOptions(writer, reader, "Would you like to:" +
+                                                        "\n1. See list of buyers" +
+                                                        "\n2. Search for a buyer",
+                                                new String[]{"1", "2"});
                                         if (buyerSearch.equals("1")) {
                                             String buyerList = "";
                                             for (int i = 0; i < main.buyers.size() - 1; i++) {
@@ -195,11 +201,11 @@ public class ApartmentsMessager {
                                                     main.recipient = accountManager.getUserFromUsername(buyerChoice);
                                                 }
                                                 if (main.recipient == null) {
-                                                    ServerProcessor.sendMessage(writer, "Please enter a user from the list", JOptionPane.WARNING_MESSAGE);
+                                                    ServerProcessor.sendMessage(writer, "Please enter a user from the list", JOptionPane.ERROR_MESSAGE);
                                                 } else if (main.recipient.getBlocked().contains(main.current.getUsername())) {
                                                     String errorMessage = "You have been blocked by " +
                                                             main.recipient.getUsername() + " and may not message them";
-                                                    ServerProcessor.sendMessage(writer, errorMessage, JOptionPane.WARNING_MESSAGE);
+                                                    ServerProcessor.sendMessage(writer, errorMessage, JOptionPane.ERROR_MESSAGE);
                                                     main.recipient = null;
                                                     break;
                                                 }
@@ -214,11 +220,11 @@ public class ApartmentsMessager {
                                             if (main.recipient == null) {
                                                 String nonexistentUser = "There does not exist a user with the username " +
                                                         buyerChoice;
-                                                ServerProcessor.sendMessage(writer, nonexistentUser, JOptionPane.WARNING_MESSAGE);
+                                                ServerProcessor.sendMessage(writer, nonexistentUser, JOptionPane.ERROR_MESSAGE);
                                             } else if (main.recipient.getBlocked().contains(main.current.getUsername())) {
                                                 String errorMessage = "You have been blocked by " +
                                                         main.recipient.getUsername() + " and may not message them";
-                                                ServerProcessor.sendMessage(writer, errorMessage, JOptionPane.WARNING_MESSAGE);
+                                                ServerProcessor.sendMessage(writer, errorMessage, JOptionPane.ERROR_MESSAGE);
                                                 main.recipient = null;
                                             }
 
@@ -226,14 +232,14 @@ public class ApartmentsMessager {
                                             break;
                                         } else {
                                             ServerProcessor.sendMessage(writer, "Please choose a number from the menu to proceed.",
-                                                    JOptionPane.WARNING_MESSAGE);
+                                                    JOptionPane.ERROR_MESSAGE);
                                         }
 
                                     }
                                     //Confirms the recipient and reads in the conversations
                                     if (!buyerSearch.equals("3")) {
                                         String recipientMessage = "You are now messaging " + main.recipient.getUsername();
-                                        ServerProcessor.sendMessage(writer, recipientMessage, JOptionPane.INFORMATION_MESSAGE);
+                                        ServerProcessor.sendMessage(writer, recipientMessage, JOptionPane.PLAIN_MESSAGE);
                                         String messageName =
                                                 main.current.getUsername() + "-" + main.recipient.getUsername() + ".txt";
                                         String recipientMessageName =
@@ -244,10 +250,14 @@ public class ApartmentsMessager {
                                         //Message Menu
                                         while (true) {
                                             String messageMenuChoice = ServerProcessor.sendOptions(writer, reader,
-                                                    "Would you like to:", new String[]{"View message history",
-                                                            "Send a new message", "Edit a message",
-                                                            "Delete a message", "Export message history",
-                                                            "Go back to the Main Menu"});
+                                                    "Would you like to:" +
+                                                            "\n1. View message history" +
+                                                            "\n2. Send a new message" +
+                                                            "\n3. Edit a message" +
+                                                            "\n4. Delete a message" +
+                                                            "\n5. Export message history" +
+                                                            "\n6. Go back to the Main Menu",
+                                                    new String[]{"1", "2", "3", "4", "5", "6"});
                                             //Prints out message history of user
                                             if (messageMenuChoice.equals("1")) {
                                                 String messageHistory = "";
@@ -256,7 +266,7 @@ public class ApartmentsMessager {
                                                     messageHistory += "\n";
                                                 }
                                                 messageHistory += main.currentConvo.get(main.currentConvo.size() - 1);
-                                                ServerProcessor.sendMessage(writer, messageHistory, JOptionPane.INFORMATION_MESSAGE);
+                                                ServerProcessor.sendMessage(writer, messageHistory, JOptionPane.PLAIN_MESSAGE);
                                                 //send message
                                             } else if (messageMenuChoice.equals("2")) {
                                                 String messageType = "";
@@ -282,15 +292,15 @@ public class ApartmentsMessager {
                                                             }
                                                         }
                                                     } else {
-                                                        ServerProcessor.sendMessage(writer, "Please choose a number from the menu to proceed.", JOptionPane.WARNING_MESSAGE);
+                                                        ServerProcessor.sendMessage(writer, "Please choose a number from the menu to proceed.", JOptionPane.ERROR_MESSAGE);
                                                     }
                                                 } while (!messageType.equals("1") && !messageType.equals("2"));
                                                 ServerProcessor.sendMessage(writer, "Message sent successfully",
-                                                        JOptionPane.INFORMATION_MESSAGE);
+                                                        JOptionPane.PLAIN_MESSAGE);
                                                 //edit message
                                             } else if (messageMenuChoice.equals("3")) {
                                                 if (main.currentConvo.size() == 0) {
-                                                    ServerProcessor.sendMessage(writer, "There is currently no conversation for you to edit.", JOptionPane.WARNING_MESSAGE);
+                                                    ServerProcessor.sendMessage(writer, "There is currently no conversation for you to edit.", JOptionPane.ERROR_MESSAGE);
                                                 } else {
                                                     String messageHistory = "";
                                                     for (int i = 0; i < main.currentConvo.size() - 1; i++) {
@@ -322,7 +332,7 @@ public class ApartmentsMessager {
                                                     if (!foundID) {
                                                         messageID = -1;
                                                         ServerProcessor.sendMessage(writer, "Please enter a valid message ID!",
-                                                                JOptionPane.WARNING_MESSAGE);
+                                                                JOptionPane.ERROR_MESSAGE);
                                                     }
                                                     if (messageID != -1) {
                                                         String editedMessage = ServerProcessor.sendInput(writer, reader,
@@ -332,14 +342,14 @@ public class ApartmentsMessager {
                                                     }
                                                     if (messageEdited) {
                                                         ServerProcessor.sendMessage(writer, "Message edited successfully!",
-                                                                JOptionPane.INFORMATION_MESSAGE);
+                                                                JOptionPane.PLAIN_MESSAGE);
                                                     }
 
                                                 }
                                                 //delete message
                                             } else if (messageMenuChoice.equals("4")) {
                                                 if (main.currentConvo.size() == 0) {
-                                                    ServerProcessor.sendMessage(writer, "There is currently no conversation for you to delete.", JOptionPane.INFORMATION_MESSAGE);
+                                                    ServerProcessor.sendMessage(writer, "There is currently no conversation for you to delete.", JOptionPane.PLAIN_MESSAGE);
                                                 } else {
                                                     String messageHistory = "";
                                                     for (int i = 0; i < main.currentConvo.size() - 1; i++) {
@@ -366,28 +376,28 @@ public class ApartmentsMessager {
                                                     }
                                                     if (!foundID) {
                                                         messageID = -1;
-                                                        ServerProcessor.sendMessage(writer, "Please enter a valid message ID!", JOptionPane.WARNING_MESSAGE);
+                                                        ServerProcessor.sendMessage(writer, "Please enter a valid message ID!", JOptionPane.ERROR_MESSAGE);
                                                     }
                                                     if (messageID != -1) {
                                                         messageDeleted = main.current.deleteMessage(messageID,
                                                                 main.currentConvo);
                                                     }
                                                     if (messageDeleted) {
-                                                        ServerProcessor.sendMessage(writer, "Message deleted successfully!", JOptionPane.INFORMATION_MESSAGE);
+                                                        ServerProcessor.sendMessage(writer, "Message deleted successfully!", JOptionPane.PLAIN_MESSAGE);
                                                     }
                                                 }
                                                 //export conversation history
                                             } else if (messageMenuChoice.equals("5")) {
                                                 fileIO.exportCSV(main.current.getUsername(), main.recipient.getUsername(),
                                                         main.currentConvo);
-                                                ServerProcessor.sendMessage(writer, "Conversation exported successfully!", JOptionPane.INFORMATION_MESSAGE);
+                                                ServerProcessor.sendMessage(writer, "Conversation exported successfully!", JOptionPane.PLAIN_MESSAGE);
                                             } else if (messageMenuChoice.equals("6")) {
                                                 break;
                                             } else if (messageMenuChoice.equals("0")) {
                                                 mainMenu = false;
                                                 break;
                                             } else {
-                                                ServerProcessor.sendMessage(writer, "Please choose a number from the menu to proceed.", JOptionPane.WARNING_MESSAGE);
+                                                ServerProcessor.sendMessage(writer, "Please choose a number from the menu to proceed.", JOptionPane.ERROR_MESSAGE);
                                             }
                                         }
 
@@ -401,12 +411,12 @@ public class ApartmentsMessager {
                                         "Please enter the name of the store you would like to create");
                                 accountManager.createStore(main.current.getUsername(), store);
                                 ServerProcessor.sendMessage(writer, "Successfully created store!",
-                                        JOptionPane.INFORMATION_MESSAGE);
+                                        JOptionPane.PLAIN_MESSAGE);
                                 //block user
                             } else if (menuChoice.equals("3")) {
                                 if (main.buyers.size() == 0) {
                                     ServerProcessor.sendMessage(writer, "There are currently no registered buyers for you to block.",
-                                            JOptionPane.WARNING_MESSAGE);
+                                            JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     String block = ServerProcessor.sendInput(writer, reader,
                                             "Please enter the username of the user you would like to block");
@@ -414,17 +424,17 @@ public class ApartmentsMessager {
                                     if (blockUser != null) {
                                         main.current.blockUser(blockUser);
                                         String blockMessage = block + " is now blocked";
-                                        ServerProcessor.sendMessage(writer, blockMessage, JOptionPane.INFORMATION_MESSAGE);
+                                        ServerProcessor.sendMessage(writer, blockMessage, JOptionPane.PLAIN_MESSAGE);
                                     } else {
                                         String blockUserError = "There does not exist a user with the username " + block;
-                                        ServerProcessor.sendMessage(writer, blockUserError, JOptionPane.WARNING_MESSAGE);
+                                        ServerProcessor.sendMessage(writer, blockUserError, JOptionPane.ERROR_MESSAGE);
                                     }
                                 }
                                 //become invisible to a user
                             } else if (menuChoice.equals("4")) {
                                 if (main.buyers.size() == 0) {
                                     ServerProcessor.sendMessage(writer, "There are currently no registered buyers " +
-                                            "for you to become invisible to.", JOptionPane.WARNING_MESSAGE);
+                                            "for you to become invisible to.", JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     String invisibleTo = ServerProcessor.sendInput(writer, reader,
                                             "Please enter the name of the user you would " +
@@ -434,17 +444,17 @@ public class ApartmentsMessager {
                                     if (invisibleToUser != null) {
                                         main.current.addInvisible(invisibleToUser);
                                         String invisibleToMessage = "You are now invisible to " + invisibleTo;
-                                        ServerProcessor.sendMessage(writer, invisibleToMessage, JOptionPane.INFORMATION_MESSAGE);
+                                        ServerProcessor.sendMessage(writer, invisibleToMessage, JOptionPane.PLAIN_MESSAGE);
                                     } else {
                                         String invisibleToErrorMessage = "There does not exist a user with the username " + invisibleTo;
-                                        ServerProcessor.sendMessage(writer, invisibleToErrorMessage, JOptionPane.WARNING_MESSAGE);
+                                        ServerProcessor.sendMessage(writer, invisibleToErrorMessage, JOptionPane.ERROR_MESSAGE);
                                     }
                                 }
                                 //quit
                             } else if (menuChoice.equals("0")) {
                                 break;
                             } else {
-                                ServerProcessor.sendMessage(writer, "Please choose a number from the menu to proceed.", JOptionPane.WARNING_MESSAGE);
+                                ServerProcessor.sendMessage(writer, "Please choose a number from the menu to proceed.", JOptionPane.ERROR_MESSAGE);
                             }
                         }
                         //if user is a buyer
@@ -550,7 +560,7 @@ public class ApartmentsMessager {
                                             if (messageMenuChoice.equals("1")) {
                                                 String currentConvoString = "";
                                                 for (Message m : main.currentConvo) {
-                                                    currentConvoString = currentConvoString + m.toString();
+                                                    currentConvoString = currentConvoString + m.toString() + "\n";
                                                 }
                                                 ServerProcessor.sendMessage(writer, currentConvoString, JOptionPane.PLAIN_MESSAGE);
                                                 //send message
@@ -588,7 +598,7 @@ public class ApartmentsMessager {
                                                 } else {
                                                     String currentConvoString = "";
                                                     for (Message m : main.currentConvo) {
-                                                        currentConvoString = currentConvoString + m.toString();
+                                                        currentConvoString = currentConvoString + m.toString() + "\n";
                                                     }
                                                     ServerProcessor.sendMessage(writer, currentConvoString, JOptionPane.PLAIN_MESSAGE);
                                                     boolean messageEdited = false;
@@ -628,7 +638,7 @@ public class ApartmentsMessager {
                                                 } else {
                                                     String currentConvoString = "";
                                                     for (Message m : main.currentConvo) {
-                                                        currentConvoString = currentConvoString + m.toString();
+                                                        currentConvoString = currentConvoString + m.toString() + "\n";
                                                     }
                                                     ServerProcessor.sendMessage(writer, currentConvoString, JOptionPane.PLAIN_MESSAGE);
                                                     boolean messageDeleted = false;
