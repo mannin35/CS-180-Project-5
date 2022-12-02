@@ -10,7 +10,7 @@ import java.io.*;
 
 
 public class ApartmentsMessager {
-
+    private static int portNum = 4242;
     private ArrayList<Message> currentConvo;
     private ArrayList<Message> recipientConvo;
     private ArrayList<User> accounts;
@@ -33,25 +33,42 @@ public class ApartmentsMessager {
 
     // Server class
     public static void main(String[] args) {
-        ServerSocket server = null;
+        ServerSocket originalServer = null;
         try {
 
-            server = new ServerSocket(4242);
+            originalServer = new ServerSocket(4242);
+            Socket origClient = originalServer.accept();
+            BufferedReader reader = null;
+            PrintWriter writer = null;
+            try {
+                reader = new BufferedReader(new InputStreamReader(origClient.getInputStream()));
+                writer = new PrintWriter(origClient.getOutputStream());
+            } catch (IOException e) {
+                System.out.println("Error creating reader/writer");
+            }
+            portNum += 1;
+            System.out.println(portNum);
+            writer.println(portNum);
+            writer.flush();
+            ServerSocket server = new ServerSocket(portNum);
+
             //server.setReuseAddress(true);
 
             // running infinite loop for getting
             // client request
-            while (true) {
+            //while (true) {
 
                 // socket object to receive incoming client
                 // requests
                 Socket client = server.accept();
+                System.out.println(client);
+                System.out.println("working");
 
-                // Displaying that new client is connected
-                // to server
-                System.out.println("New client connected"
-                        + client.getInetAddress()
-                        .getHostAddress());
+//                // Displaying that new client is connected
+//                // to server
+//                System.out.println("New client connected"
+//                        + client.getInetAddress()
+//                        .getHostAddress());
 
                 // create a new thread object
                 ClientHandler clientSock
@@ -61,13 +78,13 @@ public class ApartmentsMessager {
                 // This thread will handle the client
                 // separately
                 new Thread(clientSock).start();
-            }
+            //}
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            if (server != null) {
+            if (originalServer != null) {
                 try {
-                    server.close();
+                    originalServer.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -85,6 +102,7 @@ public class ApartmentsMessager {
         }
 
         public void run() {
+            System.out.println("h");
             PrintWriter writer = null;
             BufferedReader reader = null;
             try {
@@ -92,11 +110,13 @@ public class ApartmentsMessager {
                 // get the outputstream of client
                 writer = new PrintWriter(
                         clientSocket.getOutputStream(), true);
+                System.out.println(writer);
 
                 // get the inputstream of client
                 reader = new BufferedReader(
                         new InputStreamReader(
                                 clientSocket.getInputStream()));
+                System.out.println(reader);
 
                 ApartmentsMessager main = new ApartmentsMessager();
                 AccountManager accountManager = new AccountManager();

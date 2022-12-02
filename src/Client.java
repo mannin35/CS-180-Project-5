@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public class Client {
 
     public static Socket socket;
+    public static Socket newSocket;
 
     public static void main(String[] args) {
         Client client = new Client();
@@ -34,8 +35,28 @@ public class Client {
             }
             return;
         }
+        try {
+            int portNum = Integer.parseInt(reader.readLine());
+            System.out.println(portNum);
+            try {
+                newSocket = new Socket("localhost", portNum);
+                System.out.println(newSocket);
+            } catch (IOException e) {
+                client.createErrorMessage("Could not connect to server.");
+                return;
+            }
+            try{
+                socket.close();
+            } catch (IOException e) {
+                client.createErrorMessage("Error closing socket.");
+            }
+        } catch (IOException e) {
+            System.out.println("Error accepting new port number.");
+        }
+
 
         while (true) {
+            //System.out.println("client working");
             String commandHeader;
             try {
                 commandHeader = reader.readLine();
