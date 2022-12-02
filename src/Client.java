@@ -9,13 +9,42 @@ import java.util.ArrayList;
 public class Client {
 
     public static Socket socket;
-    public static Socket newSocket;
 
     public static void main(String[] args) {
-        Client client = new Client();
-        
+        //Original Socket
+        Socket socketOriginal;
         try {
-            socket = new Socket("localhost", 4242);
+            socketOriginal = new Socket("localhost",4242);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("I am running!");
+
+        BufferedReader readerOriginal;
+        PrintWriter writerOriginal;
+
+        try {
+            readerOriginal = new BufferedReader(new InputStreamReader(socketOriginal.getInputStream()));
+            writerOriginal = new PrintWriter(socketOriginal.getOutputStream());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        String newPort = "";
+
+        try {
+            newPort = readerOriginal.readLine();
+            System.out.println(newPort);
+            writerOriginal.close();
+            readerOriginal.close();
+            socketOriginal.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Client client = new Client();
+
+        try {
+            socket = new Socket("localhost", Integer.valueOf(newPort));
         } catch (IOException e) {
             client.createErrorMessage("Could not connect to server.");
             return;
@@ -35,28 +64,8 @@ public class Client {
             }
             return;
         }
-        try {
-            int portNum = Integer.parseInt(reader.readLine());
-            System.out.println(portNum);
-            try {
-                newSocket = new Socket("localhost", portNum);
-                System.out.println(newSocket);
-            } catch (IOException e) {
-                client.createErrorMessage("Could not connect to server.");
-                return;
-            }
-            try{
-                socket.close();
-            } catch (IOException e) {
-                client.createErrorMessage("Error closing socket.");
-            }
-        } catch (IOException e) {
-            System.out.println("Error accepting new port number.");
-        }
-
 
         while (true) {
-            //System.out.println("client working");
             String commandHeader;
             try {
                 commandHeader = reader.readLine();
