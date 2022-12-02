@@ -101,7 +101,7 @@ public class AccountManager {
 
     // Loads information into the stores arraylist
     private static void loadStores() {
-        stores = new ResourceManager<Store>();
+        stores = new ResourceManager<Store>("stores.txt");
 
         // Reads the lines of stores.txt
         ArrayList<String> lines = stores.readFile();
