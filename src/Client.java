@@ -8,11 +8,11 @@ import java.util.ArrayList;
 
 public class Client {
 
+    public static Socket socket;
 
     public static void main(String[] args) {
         Client client = new Client();
-
-        Socket socket;
+        
         try {
             socket = new Socket("localhost", 4242);
         } catch (IOException e) {
@@ -114,6 +114,13 @@ public class Client {
         String result = JOptionPane.showInputDialog(null,
                 message, "Apartments Messager", JOptionPane.QUESTION_MESSAGE);
 
+        if(result == null) {
+            try {
+                socket.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
         writer.println(result);
         writer.flush();
 
@@ -140,6 +147,13 @@ public class Client {
 
         String result = String.valueOf(intResultAdjusted);
 
+        if(result.equalsIgnoreCase("0")) {
+            try {
+                socket.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
         writer.println(result);
         writer.flush();
 

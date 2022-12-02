@@ -2,7 +2,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class ServerProcessser {
+public class ServerProcessor {
     public static String sendInput(PrintWriter writer, BufferedReader reader, String message) {
         String[] splitMessage = message.split("\n");
         int messageLines = splitMessage.length;
