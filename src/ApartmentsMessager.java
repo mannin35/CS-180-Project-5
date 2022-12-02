@@ -288,8 +288,7 @@ public class ApartmentsMessager {
                                                             "\n4. Delete a message" +
                                                             "\n5. Export message history" +
                                                             "\n6. Go back to the Main Menu",
-                                                    new String[]{"1",
-                                                            "2", "3", "4", "5", "6"});
+                                                    new String[]{"1", "2", "3", "4", "5", "6"});
                                             //Prints out message history of user
                                             if (messageMenuChoice.equals("1")) {
                                                 String messageHistory = "";
