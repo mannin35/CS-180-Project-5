@@ -69,12 +69,12 @@ public class User {
     //Loops through each arraylist until finding message with correct ID,
     //Then sets that element to be a Message with updated message String
     public boolean editMessage(int messageID, String newMessage, ArrayList<Message> user,
-                               ArrayList<Message> recipient, User editer) {
+                               ArrayList<Message> recipient, User editor) {
         boolean idExists = false;
         boolean edited = false;
         for (int i = 0; i < user.size(); i++) {
             if (user.get(i).getMessageID() == messageID) {
-                if (user.get(i).getUsername().equals(editer.getUsername())) {
+                if (user.get(i).getUsername().equals(editor.getUsername())) {
                     user.set(i, new Message(username, newMessage, messageID));
                     edited = true;
                 } else {
