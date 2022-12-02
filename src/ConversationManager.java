@@ -31,7 +31,9 @@ public class ConversationManager {
     }
 
     public void setConversation(String filename, ArrayList<Message> newConversation) {
-        conversations.put(filename, newConversation);
+        synchronized(locks.get(filename)) {
+            conversations.put(filename, newConversation);
+        }
     }
 
 }
