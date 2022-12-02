@@ -14,12 +14,17 @@ import java.util.Arrays;
  * @version November 13, 2022
  */
 public class AccountManager {
-    private ArrayList<User> accounts;
-    private ArrayList<String> buyers;
-    private ArrayList<String> sellers;
-    private ArrayList<Store> stores;
+    public static ResourceManager<User> accounts;
+    public static ResourceManager<String> buyers;
+    public static ResourceManager<String> sellers;
+    public static ResourceManager<Store> stores;
 
-    public AccountManager() {
+    static {
+        accounts = new ResourceManager<>("accounts.txt");
+        buyers = new ResourceManager<>();
+        sellers = new ResourceManager<>();
+        stores = new ResourceManager<>("stores.txt");
+
         loadAccounts();
         loadStores();
     }
@@ -58,7 +63,7 @@ public class AccountManager {
         User foundUser = findUser(username);
 
         if (foundUser == null) {
-            System.out.println("src.User doesn't exist!");
+            System.out.println("User doesn't exist!");
             return null;
         }
 
@@ -74,7 +79,7 @@ public class AccountManager {
     // Returns null if the user doesn't exist
     public User findUser(String username) {
         User foundUser = null;
-        for (User user : accounts) {
+        for (User user : accounts.getList()) {
             if (user.getUsername().equals(username)) {
                 foundUser = user;
                 break;
@@ -93,36 +98,13 @@ public class AccountManager {
         }
     }
 
-    // Returns the lines of the given file
-    private ArrayList<String> readFile(String filename) {
-        // Create file (does nothing if it already exists)
-        File file = new File(filename);
-        try {
-            file.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // Read the lines of the given file
-        ArrayList<String> lines = new ArrayList<>();
-        String line;
-        try (BufferedReader bfr = new BufferedReader(new FileReader(file))) {
-            while ((line = bfr.readLine()) != null) {
-                lines.add(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return lines;
-    }
 
     // Loads information into the stores arraylist
-    private void loadStores() {
-        stores = new ArrayList<>();
+    private static void loadStores() {
+        stores = new ResourceManager<Store>();
 
         // Reads the lines of stores.txt
-        ArrayList<String> lines = readFile("stores.txt");
+        ArrayList<String> lines = stores.readFile();
 
         // Parses the file in sections of 2 lines
         for (int i = 0; i < lines.size(); i += 2) {
@@ -137,13 +119,10 @@ public class AccountManager {
     }
 
     // Loads information into the accounts, buyers, and sellers arraylists
-    private void loadAccounts() {
-        accounts = new ArrayList<>();
-        buyers = new ArrayList<>();
-        sellers = new ArrayList<>();
+    private static void loadAccounts() {
 
         // Reads the lines of accounts.txt
-        ArrayList<String> lines = readFile("accounts.txt");
+        ArrayList<String> lines = accounts.readFile();
 
         // Parses file in sections of 6 lines
         for (int i = 0; i < lines.size(); i += 6) {
@@ -178,7 +157,7 @@ public class AccountManager {
     // Returns null if user doesn't exist
     public User getUserFromUsername(String username) {
         User foundUser = null;
-        for (User user : accounts) {
+        for (User user : accounts.getList()) {
             if (user.getUsername().equals(username)) {
                 foundUser = user;
             }
@@ -187,19 +166,5 @@ public class AccountManager {
         return foundUser;
     }
 
-    public ArrayList<User> getAccounts() {
-        return accounts;
-    }
 
-    public ArrayList<String> getBuyers() {
-        return buyers;
-    }
-
-    public ArrayList<String> getSellers() {
-        return sellers;
-    }
-
-    public ArrayList<Store> getStores() {
-        return stores;
-    }
 }

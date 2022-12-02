@@ -1,8 +1,8 @@
 import java.util.*;
 
 public class ConversationManager {
-    private HashMap<String, ArrayList<Message>> conversations;
-    private HashMap<String, Object> locks;
+    static HashMap<String, ArrayList<Message>> conversations;
+    static HashMap<String, Object> locks;
     private Object lock;
 
     public ConversationManager() {
@@ -17,9 +17,9 @@ public class ConversationManager {
         }
     }
 
-    public void addConversation(String filename, ArrayList<Message> conversation) {
-        String reversefile = filename.substring(filename.indexOf("-") + 1, filename.indexOf(".")) + 
-            "-" + filename.substring(0, filename.indexOf("-")) + ".txt";
+    public void addConversation(String user, String recipient, ArrayList<Message> conversation) {
+        String filename = user + "-" + recipient + ".txt";
+        String reversefile = recipient + "-" + user + ".txt";
         conversations.put(filename, conversation);
         if (locks.get(reversefile) != null) {
             locks.put(filename, locks.get(reversefile));
@@ -28,6 +28,10 @@ public class ConversationManager {
         }
         
         conversations.put(filename, conversation);
+    }
+
+    public void setConversation(String filename, ArrayList<Message> newConversation) {
+        conversations.put(filename, newConversation);
     }
 
 }
