@@ -1,7 +1,9 @@
+package src;
+
 import java.util.*;
 
 /**
- * Project 4 - Store
+ * Project 4 - src.Store
  * <p>
  * Encapsulates all the information a store has so that it
  * can be manipulated during runtime and written back to files.

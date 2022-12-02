@@ -1,8 +1,9 @@
+package src;
+
 import java.util.*;
-import java.io.*;
 
 /**
- * Project 4 - Store
+ * Project 4 - src.Store
  * <p>
  * Class with all the information a user has (email, password, etc.)
  * and methods that are used for sending/editing/deleting messages
@@ -42,7 +43,7 @@ public class User {
         this.invisibleTo = invisibleTo;
     }
 
-    //Takes new message String and arraylist of messages from each User. Adds new Message to both arraylists
+    //Takes new message String and arraylist of messages from each src.User. Adds new Message to both arraylists
     public void sendMessage(String message, ArrayList<Message> user, ArrayList<Message> recipient) {
         Message newMessage;
         if (user.isEmpty()) {

@@ -1,3 +1,5 @@
+package src;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,7 +60,7 @@ public class AccountManager {
         User foundUser = findUser(username);
 
         if (foundUser == null) {
-            System.out.println("User doesn't exist!");
+            System.out.println("src.User doesn't exist!");
             return null;
         }
 
