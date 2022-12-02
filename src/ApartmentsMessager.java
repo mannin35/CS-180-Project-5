@@ -1,5 +1,3 @@
-package src;
-
 import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.IOException;
