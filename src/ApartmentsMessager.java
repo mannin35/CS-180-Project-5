@@ -52,15 +52,11 @@ public class ApartmentsMessager {
                 ServerSocket serverSocketOriginal = new ServerSocket(4242);
                 serverSocketOriginal.setReuseAddress(true);
                 Socket socketOriginal = serverSocketOriginal.accept();
-                System.out.println("New client connected"
-                        + socketOriginal.getInetAddress()
-                        .getHostAddress());
 
                 BufferedReader readerOriginal = new BufferedReader(new InputStreamReader(socketOriginal.getInputStream()));
                 PrintWriter writerOriginal = new PrintWriter(socketOriginal.getOutputStream());
 
                 writerOriginal.println(++threadNumber);
-                System.out.println(threadNumber);
                 writerOriginal.flush();
 
             /*
@@ -71,7 +67,6 @@ public class ApartmentsMessager {
              */
 
                 server = new ServerSocket(threadNumber);
-                System.out.println(threadNumber);
 
                 // socket object to receive incoming client
                 // requests
@@ -79,10 +74,7 @@ public class ApartmentsMessager {
 
                 // Displaying that new client is connected
                 // to server
-                System.out.println("New client connected"
-                        + client.getInetAddress()
-                        .getHostAddress());
-
+                
                 // create a new thread object
                 ClientHandler clientSock
                         = new ClientHandler(client);
