@@ -18,7 +18,6 @@ public class Client {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("I am running!");
 
         BufferedReader readerOriginal;
         PrintWriter writerOriginal;
@@ -34,7 +33,6 @@ public class Client {
 
         try {
             newPort = readerOriginal.readLine();
-            System.out.println(newPort);
             writerOriginal.close();
             readerOriginal.close();
             socketOriginal.close();
