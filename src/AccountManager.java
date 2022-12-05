@@ -1,4 +1,3 @@
-import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -32,7 +31,7 @@ public class AccountManager {
     // Returns the created user object with given user fields
     // Returns null if user already exists or username contains commas
     // Also adds user to accounts.txt and accounts/buyers/sellers arraylists
-    public User register(String email, String username, String password, boolean isSeller) {
+    public static User register(String email, String username, String password, boolean isSeller) {
         if (findUser(username) != null) {
             System.out.println("A user with this username already exists!");
             return null;
@@ -45,7 +44,7 @@ public class AccountManager {
 
         User user = new User(email, password, username, isSeller);
 
-        appendToFile("accounts.txt", user.toString());
+        accounts.appendToFile(user.toString());
         accounts.add(user);
         if (user.isSeller()) {
             sellers.add(user.getUsername());
@@ -59,7 +58,7 @@ public class AccountManager {
 
     // Returns the user with given username and password
     // Returns null if credentials are wrong
-    public User logIn(String username, String password) {
+    public static User logIn(String username, String password) {
         User foundUser = findUser(username);
 
         if (foundUser == null) {
@@ -77,7 +76,7 @@ public class AccountManager {
 
     // Returns the user with given username
     // Returns null if the user doesn't exist
-    public User findUser(String username) {
+    public static User findUser(String username) {
         User foundUser = null;
         for (User user : accounts.getList()) {
             if (user.getUsername().equals(username)) {
@@ -89,19 +88,9 @@ public class AccountManager {
         return foundUser;
     }
 
-    // Appends a string to the end of the given file
-    private void appendToFile(String filename, String toAppend) {
-        try (PrintWriter writer = new PrintWriter(new FileWriter(filename, true))) {
-            writer.println(toAppend);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
     // Loads information into the stores arraylist
     private static void loadStores() {
-        stores = new ResourceManager<Store>("stores.txt");
+        stores = new ResourceManager<>("stores.txt");
 
         // Reads the lines of stores.txt
         ArrayList<String> lines = stores.readFile();
@@ -146,16 +135,16 @@ public class AccountManager {
 
     // Create a store from seller name and store name
     // Add it to arraylist and stores.txt
-    public void createStore(String sellerName, String storeName) {
+    public static void createStore(String sellerName, String storeName) {
         Store store = new Store(sellerName, storeName);
 
         stores.add(store);
-        appendToFile("stores.txt", store.toString());
+        stores.appendToFile(store.toString());
     }
 
     // Returns the user object that has the given username
     // Returns null if user doesn't exist
-    public User getUserFromUsername(String username) {
+    public static User getUserFromUsername(String username) {
         User foundUser = null;
         for (User user : accounts.getList()) {
             if (user.getUsername().equals(username)) {
@@ -165,6 +154,4 @@ public class AccountManager {
 
         return foundUser;
     }
-
-
 }
