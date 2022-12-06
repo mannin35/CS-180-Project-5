@@ -10,6 +10,7 @@ public class ConversationManager {
     public ConversationManager() {
         conversations = new HashMap<>();
         locks = new HashMap<>();
+        addLock = new Object();
     }
 
     public ArrayList<Message> getConversation(String filename) {
