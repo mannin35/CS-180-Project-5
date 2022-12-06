@@ -1,8 +1,5 @@
 import javax.swing.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 
@@ -11,38 +8,11 @@ public class Client {
     public static Socket socket;
 
     public static void main(String[] args) {
-        //Original Socket
-        Socket socketOriginal;
-        try {
-            socketOriginal = new Socket("localhost", 4242);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        BufferedReader readerOriginal;
-        PrintWriter writerOriginal;
-
-        try {
-            readerOriginal = new BufferedReader(new InputStreamReader(socketOriginal.getInputStream()));
-            writerOriginal = new PrintWriter(socketOriginal.getOutputStream());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        String newPort = "";
-
-        try {
-            newPort = readerOriginal.readLine();
-            writerOriginal.close();
-            readerOriginal.close();
-            socketOriginal.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
         Client client = new Client();
 
+        Socket socket;
         try {
-            socket = new Socket("localhost", Integer.valueOf(newPort));
+            socket = new Socket("localhost", 4242);
         } catch (IOException e) {
             client.createErrorMessage("Could not connect to server.");
             return;

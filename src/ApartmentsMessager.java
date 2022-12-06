@@ -17,11 +17,8 @@ To do:
 
 public class ApartmentsMessager {
 
-
     private User currentUser;
     private User recipient;
-
-    private static int threadNumber = 1234;
 
     public ApartmentsMessager() {
         currentUser = null;
@@ -30,39 +27,14 @@ public class ApartmentsMessager {
 
     // Server class
     public static void main(String[] args) {
-        ServerSocket server = null;
+        // Adapted from geeksforgeeks.org
+        ServerSocket serverSocket = null;
+
         try {
-            //server = new ServerSocket(4242);
-            //server.setReuseAddress(true);
+            serverSocket = new ServerSocket(4242);
 
-            // running infinite loop for getting
-            // client request
             while (true) {
-                ServerSocket serverSocketOriginal = new ServerSocket(4242);
-                serverSocketOriginal.setReuseAddress(true);
-                Socket socketOriginal = serverSocketOriginal.accept();
-
-                BufferedReader readerOriginal = new BufferedReader(new InputStreamReader(socketOriginal.getInputStream()));
-                PrintWriter writerOriginal = new PrintWriter(socketOriginal.getOutputStream());
-
-                writerOriginal.println(++threadNumber);
-                writerOriginal.flush();
-
-            /*
-            1. Client.java uses port 4242 originally
-            2. Server sends back port + threads.num()
-            3. Client connects and creates new socket with port + threads.num()
-            4. Client closes connection with port 4242
-             */
-
-                server = new ServerSocket(threadNumber);
-
-                // socket object to receive incoming client
-                // requests
-                Socket client = server.accept();
-
-                // Displaying that new client is connected
-                // to server
+                Socket client = serverSocket.accept();
                 
                 // create a new thread object
                 ClientHandler clientSock
@@ -72,15 +44,15 @@ public class ApartmentsMessager {
                 // This thread will handle the client
                 // separately
                 new Thread(clientSock).start();
-                serverSocketOriginal.close();
             }
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            if (server != null) {
+            if (serverSocket != null) {
                 try {
-                    server.close();
-                } catch (IOException e) {
+                    serverSocket.close();
+                }
+                catch (IOException e) {
                     e.printStackTrace();
                 }
             }
