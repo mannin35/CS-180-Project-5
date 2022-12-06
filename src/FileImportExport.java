@@ -14,7 +14,7 @@ import java.io.*;
 public class FileImportExport {
     // Allows us to get whatever is in the file and return it as a string to be
     // added as a message in a Message Object
-    public String importFile(String fileName) {
+    public static String importFile(String fileName) {
         String returnValue = "";
         try {
             FileReader fr = new FileReader(fileName);
@@ -37,7 +37,7 @@ public class FileImportExport {
 
     // Goes through each mesage object in messageToCSV and writes them in the format
     // [timeStamp,username,messageID,message]
-    public void exportCSV(String currentUser, String otherUser, ArrayList<Message> messageToCSV) {
+    public static void exportCSV(String currentUser, String otherUser, ArrayList<Message> messageToCSV) {
         String actualFile = ((currentUser) + "-" + (otherUser) + "-EXPORT" + ".csv");
         File input = new File(actualFile);
         try {
