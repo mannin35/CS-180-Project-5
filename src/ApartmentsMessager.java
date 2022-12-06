@@ -17,25 +17,14 @@ To do:
 
 public class ApartmentsMessager {
 
-    private ArrayList<Message> currentConvo;
-    private ArrayList<Message> recipientConvo;
-    private ArrayList<User> accounts;
-    private ArrayList<String> buyers;
-    private ArrayList<String> sellers;
-    private ArrayList<Store> stores;
-    private User current;
+
+    private User currentUser;
     private User recipient;
 
     private static int threadNumber = 1234;
 
     public ApartmentsMessager() {
-        currentConvo = new ArrayList<Message>();
-        recipientConvo = new ArrayList<Message>();
-        accounts = new ArrayList<User>();
-        buyers = new ArrayList<String>();
-        sellers = new ArrayList<String>();
-        stores = new ArrayList<Store>();
-        current = null;
+        currentUser = null;
         recipient = null;
     }
 
@@ -122,15 +111,7 @@ public class ApartmentsMessager {
                                 clientSocket.getInputStream()));
 
                 ApartmentsMessager main = new ApartmentsMessager();
-                AccountManager accountManager = new AccountManager();
-                FileImportExport fileIO = new FileImportExport();
 
-                //main.accounts = accountManager.getAccounts();
-                //main.buyers = accountManager.getBuyers();
-                //main.sellers = accountManager.getSellers();
-                //main.stores = accountManager.getStores();
-
-                Scanner input = new Scanner(System.in);
                 boolean loggedIn = false;
 
                 ServerProcessor.sendMessage(writer, "Welcome to L15 Apartments Messager!", JOptionPane.PLAIN_MESSAGE);
@@ -141,8 +122,8 @@ public class ApartmentsMessager {
                     if (login.equals("1")) {
                         String username = ServerProcessor.sendInput(writer, reader, "Enter username: ");
                         String password = ServerProcessor.sendInput(writer, reader, "Enter password: ");
-                        main.current = accountManager.logIn(username, password);
-                        if (main.current != null) {
+                        main.currentUser = AccountManager.logIn(username, password);
+                        if (main.currentUser != null) {
                             loggedIn = true;
                         }
                         //Check if a username with name already exists. If not, register new user
@@ -162,8 +143,8 @@ public class ApartmentsMessager {
                                 ServerProcessor.sendMessage(writer, "Please type B for buyer or S for seller!", JOptionPane.ERROR_MESSAGE);
                             }
                         } while (!(buyerOrSeller.equalsIgnoreCase("S")) && !buyerOrSeller.equalsIgnoreCase("B"));
-                        main.current = accountManager.register(email, username, password, isSeller);
-                        if (main.current != null) {
+                        main.currentUser = AccountManager.register(email, username, password, isSeller);
+                        if (main.currentUser != null) {
                             loggedIn = true;
                         }
 
@@ -176,21 +157,21 @@ public class ApartmentsMessager {
 
                 if (loggedIn) {
                     ServerProcessor.sendMessage(writer, "You are now logged in as "
-                            + main.current.getUsername(), JOptionPane.PLAIN_MESSAGE);
+                            + main.currentUser.getUsername(), JOptionPane.PLAIN_MESSAGE);
                     //logged in as seller
-                    if (main.current.isSeller()) {
+                    if (main.currentUser.isSeller()) {
                         //removes buyers who chose to be invisible to currently logged in seller from list of buyers
-                        for (int i = 0; i < main.accounts.size(); i++) {
-                            User c = main.accounts.get(i);
-                            if (c.getinvisibleTo().contains(main.current.getUsername())) {
-                                main.buyers.remove(c.getUsername());
+                        for (int i = 0; i < AccountManager.accounts.size(); i++) {
+                            User c = AccountManager.accounts.get(i);
+                            if (c.getinvisibleTo().contains(main.currentUser.getUsername())) {
+                                AccountManager.buyers.remove(c.getUsername());
                             }
                         }
                         //Main menu
                         //Will keep looping until user chooses to quit
                         boolean mainMenu = true;
                         while (mainMenu) {
-                            main.recipient = null;
+                            main.setRecipient(null);
                             String menuChoice = ServerProcessor.sendOptions(writer, reader, "What would you like to do?" +
                                             "\n1. Search for a buyer to message" +
                                             "\n2. Create a store" +
@@ -199,7 +180,7 @@ public class ApartmentsMessager {
                                     new String[]{"1", "2", "3", "4"});
                             //Find user to message
                             if (menuChoice.equals("1")) {
-                                if (main.buyers.size() == 0) {
+                                if (AccountManager.buyers.size() == 0) {
                                     ServerProcessor.sendMessage(writer, "There are currently no registered buyers for you to message.",
                                             JOptionPane.ERROR_MESSAGE);
                                 } else {
@@ -212,24 +193,24 @@ public class ApartmentsMessager {
                                                 new String[]{"1", "2"});
                                         if (buyerSearch.equals("1")) {
                                             String buyerList = "";
-                                            for (int i = 0; i < main.buyers.size() - 1; i++) {
-                                                buyerList += main.buyers.get(i);
+                                            for (int i = 0; i < AccountManager.buyers.size() - 1; i++) {
+                                                buyerList += AccountManager.buyers.get(i);
                                                 buyerList += "\n";
                                             }
-                                            buyerList += main.buyers.get(main.buyers.size() - 1);
+                                            buyerList += AccountManager.buyers.get(AccountManager.buyers.size() - 1);
                                             do {
                                                 String buyerChoice = ServerProcessor.sendInput(writer, reader,
                                                         buyerList + "\nWhich buyer would you like to message?");
-                                                if (main.buyers.contains(buyerChoice)) {
-                                                    main.recipient = accountManager.getUserFromUsername(buyerChoice);
+                                                if (AccountManager.buyers.contains(buyerChoice)) {
+                                                    main.setRecipient(AccountManager.getUserFromUsername(buyerChoice));
                                                 }
                                                 if (main.recipient == null) {
                                                     ServerProcessor.sendMessage(writer, "Please enter a user from the list", JOptionPane.ERROR_MESSAGE);
-                                                } else if (main.recipient.getBlocked().contains(main.current.getUsername())) {
+                                                } else if (main.recipient.getBlocked().contains(main.currentUser.getUsername())) {
                                                     String errorMessage = "You have been blocked by " +
                                                             main.recipient.getUsername() + " and may not message them";
                                                     ServerProcessor.sendMessage(writer, errorMessage, JOptionPane.ERROR_MESSAGE);
-                                                    main.recipient = null;
+                                                    main.setRecipient(null);
                                                     break;
                                                 }
                                             } while (main.recipient == null);
@@ -237,18 +218,18 @@ public class ApartmentsMessager {
                                             String buyerChoice = ServerProcessor.sendInput(writer, reader,
                                                     "Please enter the username of the buyer " +
                                                             "you would like to message");
-                                            if (main.buyers.contains(buyerChoice)) {
-                                                main.recipient = accountManager.getUserFromUsername(buyerChoice);
+                                            if (AccountManager.buyers.contains(buyerChoice)) {
+                                                main.setRecipient(AccountManager.getUserFromUsername(buyerChoice));
                                             }
                                             if (main.recipient == null) {
                                                 String nonexistentUser = "There does not exist a user with the username " +
                                                         buyerChoice;
                                                 ServerProcessor.sendMessage(writer, nonexistentUser, JOptionPane.ERROR_MESSAGE);
-                                            } else if (main.recipient.getBlocked().contains(main.current.getUsername())) {
+                                            } else if (main.recipient.getBlocked().contains(main.currentUser.getUsername())) {
                                                 String errorMessage = "You have been blocked by " +
                                                         main.recipient.getUsername() + " and may not message them";
                                                 ServerProcessor.sendMessage(writer, errorMessage, JOptionPane.ERROR_MESSAGE);
-                                                main.recipient = null;
+                                                main.setRecipient(null);
                                             }
 
                                         } else if (buyerSearch.equals("0")) {
@@ -264,11 +245,9 @@ public class ApartmentsMessager {
                                         String recipientMessage = "You are now messaging " + main.recipient.getUsername();
                                         ServerProcessor.sendMessage(writer, recipientMessage, JOptionPane.PLAIN_MESSAGE);
                                         String messageName =
-                                                main.current.getUsername() + "-" + main.recipient.getUsername() + ".txt";
+                                                main.currentUser.getUsername() + "-" + main.recipient.getUsername() + ".txt";
                                         String recipientMessageName =
-                                                main.recipient.getUsername() + "-" + main.current.getUsername() + ".txt";
-                                        main.currentConvo = main.readConversation(main, messageName);
-                                        main.recipientConvo = main.readConversation(main, recipientMessageName);
+                                                main.recipient.getUsername() + "-" + main.currentUser.getUsername() + ".txt";
 
                                         //Message Menu
                                         while (true) {
@@ -284,11 +263,11 @@ public class ApartmentsMessager {
                                             //Prints out message history of user
                                             if (messageMenuChoice.equals("1")) {
                                                 String messageHistory = "";
-                                                for (int i = 0; i < main.currentConvo.size() - 1; i++) {
-                                                    messageHistory += main.currentConvo.get(i);
+                                                for (int i = 0; i < main.getCurrentConvo().size() - 1; i++) {
+                                                    messageHistory += main.getCurrentConvo().get(i);
                                                     messageHistory += "\n";
                                                 }
-                                                messageHistory += main.currentConvo.get(main.currentConvo.size() - 1);
+                                                messageHistory += main.getCurrentConvo().get(main.getCurrentConvo().size() - 1);
                                                 ServerProcessor.sendMessage(writer, messageHistory, JOptionPane.PLAIN_MESSAGE);
                                                 //send message
                                             } else if (messageMenuChoice.equals("2")) {
@@ -300,18 +279,16 @@ public class ApartmentsMessager {
                                                     if (messageType.equals("1")) {
                                                         String newMessage = ServerProcessor.sendInput(writer, reader,
                                                                 "Please enter the message you would like to enter");
-                                                        main.current.sendMessage(newMessage, main.currentConvo,
-                                                                main.recipientConvo);
+                                                        ConversationManager.sendMessage(main.currentUser, main.recipient, newMessage);
                                                     } else if (messageType.equals("2")) {
                                                         String fileMessage = "";
                                                         while (fileMessage.equals("")) {
                                                             String importFileName = ServerProcessor.sendInput(writer, reader,
                                                                     "Please enter the name of the file you would " +
                                                                             "like to import");
-                                                            fileMessage = fileIO.importFile(importFileName);
+                                                            fileMessage = FileImportExport.importFile(importFileName);
                                                             if (!fileMessage.equals("")) {
-                                                                main.current.sendMessage(fileMessage, main.currentConvo,
-                                                                        main.recipientConvo);
+                                                                ConversationManager.sendMessage(main.currentUser, main.recipient, fileMessage);
                                                             }
                                                         }
                                                     } else {
@@ -322,15 +299,15 @@ public class ApartmentsMessager {
                                                         JOptionPane.PLAIN_MESSAGE);
                                                 //edit message
                                             } else if (messageMenuChoice.equals("3")) {
-                                                if (main.currentConvo.size() == 0) {
+                                                if (main.getCurrentConvo().size() == 0) {
                                                     ServerProcessor.sendMessage(writer, "There is currently no conversation for you to edit.", JOptionPane.ERROR_MESSAGE);
                                                 } else {
                                                     String messageHistory = "";
-                                                    for (int i = 0; i < main.currentConvo.size() - 1; i++) {
-                                                        messageHistory += main.currentConvo.get(i);
+                                                    for (int i = 0; i < main.getCurrentConvo().size() - 1; i++) {
+                                                        messageHistory += main.getCurrentConvo().get(i);
                                                         messageHistory += "\n";
                                                     }
-                                                    messageHistory += main.currentConvo.get(main.currentConvo.size() - 1);
+                                                    messageHistory += main.getCurrentConvo().get(main.getCurrentConvo().size() - 1);
                                                     messageHistory += "\n";
                                                     boolean messageEdited = false;
                                                     int messageID = -1;
@@ -346,7 +323,7 @@ public class ApartmentsMessager {
 
                                                     }
                                                     boolean foundID = false;
-                                                    for (Message message : main.currentConvo) {
+                                                    for (Message message : main.getCurrentConvo()) {
                                                         if (message.getMessageID() == messageID) {
                                                             foundID = true;
                                                             break;
@@ -360,8 +337,8 @@ public class ApartmentsMessager {
                                                     if (messageID != -1) {
                                                         String editedMessage = ServerProcessor.sendInput(writer, reader,
                                                                 "What would you like to edit the message to?");
-                                                        messageEdited = main.current.editMessage(messageID, editedMessage,
-                                                                main.currentConvo, main.recipientConvo, main.current);
+                                                        messageEdited = ConversationManager.editMessage(main.currentUser, main.recipient,
+                                                                messageID, editedMessage);
                                                     }
                                                     if (messageEdited) {
                                                         ServerProcessor.sendMessage(writer, "Message edited successfully!",
@@ -371,15 +348,15 @@ public class ApartmentsMessager {
                                                 }
                                                 //delete message
                                             } else if (messageMenuChoice.equals("4")) {
-                                                if (main.currentConvo.size() == 0) {
+                                                if (main.getCurrentConvo().size() == 0) {
                                                     ServerProcessor.sendMessage(writer, "There is currently no conversation for you to delete.", JOptionPane.PLAIN_MESSAGE);
                                                 } else {
                                                     String messageHistory = "";
-                                                    for (int i = 0; i < main.currentConvo.size() - 1; i++) {
-                                                        messageHistory += main.currentConvo.get(i);
+                                                    for (int i = 0; i < main.getCurrentConvo().size() - 1; i++) {
+                                                        messageHistory += main.getCurrentConvo().get(i);
                                                         messageHistory += "\n";
                                                     }
-                                                    messageHistory += main.currentConvo.get(main.currentConvo.size() - 1);
+                                                    messageHistory += main.getCurrentConvo().get(main.getCurrentConvo().size() - 1);
                                                     messageHistory += "\n";
                                                     boolean messageDeleted = false;
                                                     int messageID = -1;
@@ -391,7 +368,7 @@ public class ApartmentsMessager {
                                                     } catch (InputMismatchException ignored) {
                                                     }
                                                     boolean foundID = false;
-                                                    for (Message message : main.currentConvo) {
+                                                    for (Message message : main.getCurrentConvo()) {
                                                         if (message.getMessageID() == messageID) {
                                                             foundID = true;
                                                             break;
@@ -402,8 +379,7 @@ public class ApartmentsMessager {
                                                         ServerProcessor.sendMessage(writer, "Please enter a valid message ID!", JOptionPane.ERROR_MESSAGE);
                                                     }
                                                     if (messageID != -1) {
-                                                        messageDeleted = main.current.deleteMessage(messageID,
-                                                                main.currentConvo);
+                                                        messageDeleted = ConversationManager.deleteMessage(main.currentUser, main.recipient, messageID);
                                                     }
                                                     if (messageDeleted) {
                                                         ServerProcessor.sendMessage(writer, "Message deleted successfully!", JOptionPane.PLAIN_MESSAGE);
@@ -411,8 +387,8 @@ public class ApartmentsMessager {
                                                 }
                                                 //export conversation history
                                             } else if (messageMenuChoice.equals("5")) {
-                                                fileIO.exportCSV(main.current.getUsername(), main.recipient.getUsername(),
-                                                        main.currentConvo);
+                                                FileImportExport.exportCSV(main.currentUser.getUsername(), main.recipient.getUsername(),
+                                                        main.getCurrentConvo());
                                                 ServerProcessor.sendMessage(writer, "Conversation exported successfully!", JOptionPane.PLAIN_MESSAGE);
                                             } else if (messageMenuChoice.equals("6")) {
                                                 break;
@@ -424,28 +400,26 @@ public class ApartmentsMessager {
                                             }
                                         }
 
-                                        //updates conversation txt files
-                                        main.writeMessages(main);
                                     }
                                 }
                                 //create store
                             } else if (menuChoice.equals("2")) {
                                 String store = ServerProcessor.sendInput(writer, reader,
                                         "Please enter the name of the store you would like to create");
-                                accountManager.createStore(main.current.getUsername(), store);
+                                AccountManager.createStore(main.currentUser.getUsername(), store);
                                 ServerProcessor.sendMessage(writer, "Successfully created store!",
                                         JOptionPane.PLAIN_MESSAGE);
                                 //block user
                             } else if (menuChoice.equals("3")) {
-                                if (main.buyers.size() == 0) {
+                                if (AccountManager.buyers.size() == 0) {
                                     ServerProcessor.sendMessage(writer, "There are currently no registered buyers for you to block.",
                                             JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     String block = ServerProcessor.sendInput(writer, reader,
                                             "Please enter the username of the user you would like to block");
-                                    User blockUser = accountManager.getUserFromUsername(block);
+                                    User blockUser = AccountManager.getUserFromUsername(block);
                                     if (blockUser != null) {
-                                        main.current.blockUser(blockUser);
+                                        main.currentUser.blockUser(blockUser);
                                         String blockMessage = block + " is now blocked";
                                         ServerProcessor.sendMessage(writer, blockMessage, JOptionPane.PLAIN_MESSAGE);
                                     } else {
@@ -455,7 +429,7 @@ public class ApartmentsMessager {
                                 }
                                 //become invisible to a user
                             } else if (menuChoice.equals("4")) {
-                                if (main.buyers.size() == 0) {
+                                if (AccountManager.buyers.size() == 0) {
                                     ServerProcessor.sendMessage(writer, "There are currently no registered buyers " +
                                             "for you to become invisible to.", JOptionPane.ERROR_MESSAGE);
                                 } else {
@@ -463,9 +437,9 @@ public class ApartmentsMessager {
                                             "Please enter the name of the user you would " +
                                                     "like to become invisible to");
 
-                                    User invisibleToUser = accountManager.getUserFromUsername(invisibleTo);
+                                    User invisibleToUser = AccountManager.getUserFromUsername(invisibleTo);
                                     if (invisibleToUser != null) {
-                                        main.current.addInvisible(invisibleToUser);
+                                        main.currentUser.addInvisible(invisibleToUser);
                                         String invisibleToMessage = "You are now invisible to " + invisibleTo;
                                         ServerProcessor.sendMessage(writer, invisibleToMessage, JOptionPane.PLAIN_MESSAGE);
                                     } else {
@@ -481,16 +455,16 @@ public class ApartmentsMessager {
                             }
                         }
                         //if user is a buyer
-                    } else if (!main.current.isSeller()) {
+                    } else if (!main.currentUser.isSeller()) {
                         //removes stores whose sellers chose to become invisible to currently logged in buyer from list of
                         // stores
-                        for (int i = 0; i < main.accounts.size(); i++) {
-                            User c = main.accounts.get(i);
-                            if (c.getinvisibleTo().contains(main.current.getUsername())) {
-                                for (int j = 0; j < main.stores.size(); j++) {
-                                    Store s = main.stores.get(j);
+                        for (int i = 0; i < AccountManager.accounts.size(); i++) {
+                            User c = AccountManager.accounts.get(i);
+                            if (c.getinvisibleTo().contains(main.currentUser.getUsername())) {
+                                for (int j = 0; j < AccountManager.stores.size(); j++) {
+                                    Store s = AccountManager.stores.get(j);
                                     if (s.getSeller().equals(c.getUsername())) {
-                                        main.stores.remove(s);
+                                        AccountManager.stores.remove(s);
                                     }
                                 }
                             }
@@ -498,12 +472,12 @@ public class ApartmentsMessager {
                         //main menu
                         boolean mainMenu = true;
                         while (mainMenu) {
-                            main.recipient = null;
+                            main.setRecipient(null);
                             String menuChoice = ServerProcessor.sendOptions(writer, reader, "What would you like to do?\n1. Message a seller\n2. Block a user\n" +
                                     "3. Become invisible to a user", new String[] {"1", "2", "3"});
                             //FInd a user to message
                             if (menuChoice.equals("1")) {
-                                if (main.sellers.size() == 0) {
+                                if (AccountManager.sellers.size() == 0) {
                                     ServerProcessor.sendMessage(writer, "There are currently no sellers registered for you to message.", JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     String buyerSearch = "";
@@ -512,32 +486,32 @@ public class ApartmentsMessager {
                                                 new String[] {"1", "2"});
                                         //search by store
                                         if (buyerSearch.equals("1")) {
-                                            if (main.stores.size() == 0) {
+                                            if (AccountManager.stores.size() == 0) {
                                                 ServerProcessor.sendMessage(writer, "There are currently no stores available to message.", JOptionPane.ERROR_MESSAGE);
                                             } else {
                                                 String storeListString = "";
-                                                for (int i = 0; i < main.stores.size(); i++) {
-                                                    storeListString = storeListString + main.stores.get(i) + "\n";
+                                                for (int i = 0; i < AccountManager.stores.size(); i++) {
+                                                    storeListString = storeListString + AccountManager.stores.get(i) + "\n";
                                                 }
                                                 ServerProcessor.sendMessage(writer, storeListString, JOptionPane.PLAIN_MESSAGE);
                                                 do {
                                                     String storeChoice = ServerProcessor.sendInput(writer, reader, "Which store would you like to message?");
                                                     //searches through stores objects until one of the store names matches
                                                     // the search. THen, gets the seller who owns that store
-                                                    for (int i = 0; i < main.stores.size(); i++) {
-                                                        if (main.stores.get(i).getName().equalsIgnoreCase(storeChoice)) {
+                                                    for (int i = 0; i < AccountManager.stores.size(); i++) {
+                                                        if (AccountManager.stores.get(i).getName().equalsIgnoreCase(storeChoice)) {
                                                             main.recipient =
-                                                                    accountManager.getUserFromUsername(main.stores.get(i)
+                                                                    AccountManager.getUserFromUsername(AccountManager.stores.get(i)
                                                                             .getSeller());
                                                         }
                                                     }
                                                     if (main.recipient == null) {
                                                         ServerProcessor.sendMessage(writer, "Please enter a store from the list.", JOptionPane.ERROR_MESSAGE);
                                                     } else if (main.recipient.getBlocked()
-                                                            .contains(main.current.getUsername())) {
+                                                            .contains(main.currentUser.getUsername())) {
                                                         ServerProcessor.sendMessage(writer, "You have been blocked by the owner of" +
                                                                 storeChoice + " and may not message them", JOptionPane.ERROR_MESSAGE);
-                                                        main.recipient = null;
+                                                        main.setRecipient(null);
                                                         break;
                                                     }
                                                 } while (main.recipient == null);
@@ -546,16 +520,16 @@ public class ApartmentsMessager {
                                         } else if (buyerSearch.equals("2")) {
                                             String sellerChoice  = ServerProcessor.sendInput(writer, reader, "Please enter the username of the seller you would like to " +
                                                     "message");
-                                            if (main.sellers.contains(sellerChoice)) {
-                                                main.recipient = accountManager.getUserFromUsername(sellerChoice);
+                                            if (AccountManager.sellers.contains(sellerChoice)) {
+                                                main.setRecipient(AccountManager.getUserFromUsername(sellerChoice));
                                             }
                                             if (main.recipient == null) {
                                                 ServerProcessor.sendMessage(writer, "There does not exist a user with the username "
                                                         + sellerChoice, JOptionPane.ERROR_MESSAGE);
-                                            } else if (main.recipient.getBlocked().contains(main.current.getUsername())) {
+                                            } else if (main.recipient.getBlocked().contains(main.currentUser.getUsername())) {
                                                 ServerProcessor.sendMessage(writer, "You have been blocked by " +
                                                         main.recipient.getUsername() + " and may not message them", JOptionPane.ERROR_MESSAGE);
-                                                main.recipient = null;
+                                                main.setRecipient(null);
                                             }
                                             //quit
                                         } else if (buyerSearch.equals("3")) {
@@ -567,12 +541,6 @@ public class ApartmentsMessager {
                                     //Confirm recipient and read in message txt files
                                     if (!buyerSearch.equals("3")) {
                                         ServerProcessor.sendMessage(writer, "You are now messaging " + main.recipient.getUsername(), JOptionPane.PLAIN_MESSAGE);
-                                        String messageName =
-                                                main.current.getUsername() + "-" + main.recipient.getUsername() + ".txt";
-                                        String recipientMessageName =
-                                                main.recipient.getUsername() + "-" + main.current.getUsername() + ".txt";
-                                        main.currentConvo = main.readConversation(main, messageName);
-                                        main.recipientConvo = main.readConversation(main, recipientMessageName);
 
                                         //Message Menu
                                         while (true) {
@@ -582,7 +550,7 @@ public class ApartmentsMessager {
                                             //print out message history
                                             if (messageMenuChoice.equals("1")) {
                                                 String currentConvoString = "";
-                                                for (Message m : main.currentConvo) {
+                                                for (Message m : main.getCurrentConvo()) {
                                                     currentConvoString = currentConvoString + m.toString() + "\n";
                                                 }
                                                 ServerProcessor.sendMessage(writer, currentConvoString, JOptionPane.PLAIN_MESSAGE);
@@ -595,18 +563,16 @@ public class ApartmentsMessager {
                                                     //send new message by typing input
                                                     if (messageType.equals("1")) {
                                                         String newMessage = ServerProcessor.sendInput(writer, reader, "Please enter the message you would like to enter");
-                                                        main.current.sendMessage(newMessage, main.currentConvo,
-                                                                main.recipientConvo);
+                                                        ConversationManager.sendMessage(main.currentUser, main.recipient, newMessage);
                                                         //send message by importing file
                                                     } else if (messageType.equals("2")) {
                                                         String fileMessage = "";
                                                         while (fileMessage.equals("")) {
                                                             String importFileName = ServerProcessor.sendInput(writer, reader, "Please enter the name of the file you would " +
                                                                     "like to import");
-                                                            fileMessage = fileIO.importFile(importFileName);
+                                                            fileMessage = FileImportExport.importFile(importFileName);
                                                             if (!fileMessage.equals("")) {
-                                                                main.current.sendMessage(fileMessage, main.currentConvo,
-                                                                        main.recipientConvo);
+                                                                ConversationManager.sendMessage(main.currentUser, main.recipient, fileMessage);
                                                             }
                                                         }
                                                     } else {
@@ -616,11 +582,11 @@ public class ApartmentsMessager {
                                                 ServerProcessor.sendMessage(writer, "Message sent successfully", JOptionPane.PLAIN_MESSAGE);
                                                 //edit message
                                             } else if (messageMenuChoice.equals("3")) {
-                                                if (main.currentConvo.size() == 0) {
+                                                if (main.getCurrentConvo().size() == 0) {
                                                     ServerProcessor.sendMessage(writer, "There is currently no conversation for you to edit.", JOptionPane.ERROR_MESSAGE);
                                                 } else {
                                                     String currentConvoString = "";
-                                                    for (Message m : main.currentConvo) {
+                                                    for (Message m : main.getCurrentConvo()) {
                                                         currentConvoString = currentConvoString + m.toString() + "\n";
                                                     }
                                                     ServerProcessor.sendMessage(writer, currentConvoString, JOptionPane.PLAIN_MESSAGE);
@@ -633,7 +599,7 @@ public class ApartmentsMessager {
                                                     } catch (InputMismatchException e) {
                                                     }
                                                     boolean foundID = false;
-                                                    for (Message message : main.currentConvo) {
+                                                    for (Message message : main.getCurrentConvo()) {
                                                         if (message.getMessageID() == messageID) {
                                                             foundID = true;
                                                             break;
@@ -645,8 +611,8 @@ public class ApartmentsMessager {
                                                     }
                                                     if (messageID != -1) {
                                                         String editedMessage = ServerProcessor.sendInput(writer, reader, "What would you like to edit the message to?");
-                                                        messageEdited = main.current.editMessage(messageID, editedMessage,
-                                                                main.currentConvo, main.recipientConvo, main.current);
+                                                        messageEdited = ConversationManager.editMessage(main.currentUser,
+                                                                main.recipient, messageID, editedMessage);
                                                     }
                                                     if (messageEdited) {
                                                         ServerProcessor.sendMessage(writer, "Message edited successfully!", JOptionPane.PLAIN_MESSAGE);
@@ -654,11 +620,11 @@ public class ApartmentsMessager {
                                                 }
                                                 //delete messsage
                                             } else if (messageMenuChoice.equals("4")) {
-                                                if (main.currentConvo.size() == 0) {
+                                                if (main.getCurrentConvo().size() == 0) {
                                                     ServerProcessor.sendMessage(writer, "There is currently no conversation for you to delete.", JOptionPane.ERROR_MESSAGE);
                                                 } else {
                                                     String currentConvoString = "";
-                                                    for (Message m : main.currentConvo) {
+                                                    for (Message m : main.getCurrentConvo()) {
                                                         currentConvoString = currentConvoString + m.toString() + "\n";
                                                     }
                                                     ServerProcessor.sendMessage(writer, currentConvoString, JOptionPane.PLAIN_MESSAGE);
@@ -671,7 +637,7 @@ public class ApartmentsMessager {
                                                     } catch (InputMismatchException e) {
                                                     }
                                                     boolean foundID = false;
-                                                    for (Message message : main.currentConvo) {
+                                                    for (Message message : main.getCurrentConvo()) {
                                                         if (message.getMessageID() == messageID) {
                                                             foundID = true;
                                                             break;
@@ -682,8 +648,8 @@ public class ApartmentsMessager {
                                                         ServerProcessor.sendMessage(writer, "Please enter a valid message ID!", JOptionPane.ERROR_MESSAGE);
                                                     }
                                                     if (messageID != -1) {
-                                                        messageDeleted = main.current.deleteMessage(messageID,
-                                                                main.currentConvo);
+                                                        messageDeleted = ConversationManager.deleteMessage(main.currentUser,
+                                                                main.recipient, messageID);
                                                     }
                                                     if (messageDeleted) {
                                                         ServerProcessor.sendMessage(writer, "Message deleted successfully!", JOptionPane.PLAIN_MESSAGE);
@@ -691,8 +657,8 @@ public class ApartmentsMessager {
                                                 }
                                                 //export message
                                             } else if (messageMenuChoice.equals("5")) {
-                                                fileIO.exportCSV(main.current.getUsername(), main.recipient.getUsername(),
-                                                        main.currentConvo);
+                                                FileImportExport.exportCSV(main.currentUser.getUsername(), main.recipient.getUsername(),
+                                                        main.getCurrentConvo());
                                                 ServerProcessor.sendMessage(writer, "Conversation exported successfully!", JOptionPane.PLAIN_MESSAGE);
                                                 //quit to main menu
                                             } else if (messageMenuChoice.equals("6")) {
@@ -705,19 +671,17 @@ public class ApartmentsMessager {
                                                 ServerProcessor.sendMessage(writer, "Please choose a number from the menu to proceed.", JOptionPane.ERROR_MESSAGE);
                                             }
                                         }
-                                        //write new edits/messages to txt files
-                                        main.writeMessages(main);
                                     }
                                 }
                                 //block user
                             } else if (menuChoice.equals("2")) {
-                                if (main.sellers.size() == 0) {
+                                if (AccountManager.sellers.size() == 0) {
                                     ServerProcessor.sendMessage(writer, "There are currently no sellers registered for you to block.", JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     String block = ServerProcessor.sendInput(writer, reader, "Please enter the username of the user you would like to block");
-                                    User blockUser = accountManager.getUserFromUsername(block);
+                                    User blockUser = AccountManager.getUserFromUsername(block);
                                     if (blockUser != null) {
-                                        main.current.blockUser(blockUser);
+                                        main.currentUser.blockUser(blockUser);
                                         ServerProcessor.sendMessage(writer, block + " is now blocked", JOptionPane.PLAIN_MESSAGE);
                                     } else {
                                         ServerProcessor.sendMessage(writer, "There does not exist a user with the username " + block, JOptionPane.ERROR_MESSAGE);
@@ -725,15 +689,15 @@ public class ApartmentsMessager {
                                 }
                                 //become invisible to user
                             } else if (menuChoice.equals("3")) {
-                                if (main.sellers.size() == 0) {
+                                if (AccountManager.sellers.size() == 0) {
                                     ServerProcessor.sendMessage(writer, "There are currently no sellers registered for you to become invisible" +
                                             " to.", JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     String invisibleTo = ServerProcessor.sendInput(writer, reader, "Please enter the name of the user you would like to become invisible " +
                                             "to");
-                                    User invisibleToUser = accountManager.getUserFromUsername(invisibleTo);
+                                    User invisibleToUser = AccountManager.getUserFromUsername(invisibleTo);
                                     if (invisibleToUser != null) {
-                                        main.current.addInvisible(invisibleToUser);
+                                        main.currentUser.addInvisible(invisibleToUser);
                                         ServerProcessor.sendMessage(writer, "You are now invisible to " + invisibleTo, JOptionPane.PLAIN_MESSAGE);
                                     } else {
                                         ServerProcessor.sendMessage(writer, "There does not exist a user with the username " + invisibleTo, JOptionPane.ERROR_MESSAGE);
@@ -749,7 +713,11 @@ public class ApartmentsMessager {
                     }
                 }
                 //write accounts back to accounts.txt to update blocked and invisibleTo lists
-                main.writeAccounts(main);
+                AccountManager.accounts.writeListToFile();
+                AccountManager.stores.writeListToFile();
+                if (main.recipient != null)
+                    ConversationManager.closeConversation(main.currentUser.getUsername(), main.recipient.getUsername());
+
                 ServerProcessor.sendMessage(writer, "Thank you for using Apartments Messager!", JOptionPane.PLAIN_MESSAGE);
 
             } catch (IOException e) {
@@ -770,90 +738,29 @@ public class ApartmentsMessager {
         }
     }
 
-    //Reads in a conversation txt file and returns an ArrayList of messages
-    public ArrayList<Message> readConversation(ApartmentsMessager main, String filename) {
-        ArrayList<Message> read = new ArrayList<Message>();
-        File file = new File(filename);
-        ArrayList<String> convo = new ArrayList<String>();
-
-        try {
-            if (!file.createNewFile()) {
-                FileReader fr = new FileReader(file);
-                BufferedReader bfr = new BufferedReader(fr);
-                String line = bfr.readLine();
-                while (line != null) {
-                    convo.add(line);
-                    line = bfr.readLine();
-                }
-                bfr.close();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+    // Set the recipient to the given value
+    // Open the conversation if the new recipient is not null
+    // Close the conversation if the current value of the recipient is not null
+    // Done so I don't have to determine specifically when this must happen in previous code
+    private void setRecipient(User recipientArg) {
+        if (this.recipient != null) {
+            ConversationManager.closeConversation(this.currentUser.getUsername(), this.recipient.getUsername());
         }
 
-        if (convo.size() > 0) {
-            for (int i = 0; i < convo.size(); i += 4) {
-                String timestamp = convo.get(i);
-                String username = convo.get(i + 1);
-                int messageID = Integer.parseInt(convo.get(i + 2));
-                String message = convo.get(i + 3);
-                read.add(new Message(username, message, messageID, timestamp));
-            }
+        if (recipientArg != null) {
+            ConversationManager.openConversation(this.currentUser.getUsername(), this.recipient.getUsername());
         }
-        return read;
+
+        this.recipient = recipientArg;
     }
 
-    //Write messages into the conversation txt files
-    public void writeMessages(ApartmentsMessager messager) {
-        String userName = messager.current.getUsername();
-        String recipientName = messager.recipient.getUsername();
-        String filename = userName + "-" + recipientName + ".txt";
-        File file = new File(filename);
-
-        String conversation = "";
-        if (messager.currentConvo.size() > 0) {
-            conversation = messager.currentConvo.get(0).toString();
-            for (int i = 1; i < messager.currentConvo.size(); i++) {
-                conversation += "\n" + messager.currentConvo.get(i).toString();
-            }
-        }
-        try {
-            PrintWriter pw = new PrintWriter(new FileOutputStream(file, false));
-            pw.print(conversation);
-            pw.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        filename = recipientName + "-" + userName + ".txt";
-        file = new File(filename);
-
-        conversation = "";
-        if (messager.recipientConvo.size() > 0) {
-            conversation = messager.recipientConvo.get(0).toString();
-            for (int i = 1; i < messager.recipientConvo.size(); i++) {
-                conversation += "\n" + messager.recipientConvo.get(i).toString();
-            }
-        }
-        try {
-            PrintWriter pw = new PrintWriter(new FileOutputStream(file));
-            pw.print(conversation);
-            pw.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    // Getters for currentConvo and recipientConvo
+    // Created to ensure that convos are always up-to-date (concurrent)
+    private ArrayList<Message> getCurrentConvo() {
+        return ConversationManager.getConversation(currentUser.getUsername(), recipient.getUsername());
     }
 
-    //Write accounts to accounts.txt
-    public void writeAccounts(ApartmentsMessager messager) {
-        File file = new File("accounts.txt");
-        try {
-            PrintWriter pw = new PrintWriter(new FileOutputStream(file, false));
-            for (User u : messager.accounts) {
-                pw.println(u.toString());
-            }
-            pw.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private ArrayList<Message> getRecipientConvo() {
+        return ConversationManager.getConversation(recipient.getUsername(), currentUser.getUsername());
     }
 }
