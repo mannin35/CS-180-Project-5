@@ -4,7 +4,7 @@ import java.io.*;
 public class ResourceManager<T> {
     private String filename;
     private Object fileLock;
-    private Object listLock;
+    private final Object listLock;
     private ArrayList<T> list;
 
     public ResourceManager(String filename) {
@@ -25,7 +25,7 @@ public class ResourceManager<T> {
             return list;
         }
     }
-    public T getAt(int index) {
+    public T get(int index) {
         synchronized(listLock) {
             return list.get(index);
         }
@@ -37,12 +37,46 @@ public class ResourceManager<T> {
         }
     }
 
+    public int size() {
+        synchronized (listLock) {
+            return list.size();
+        }
+    }
+
+    public boolean remove(T element) {
+        synchronized (listLock) {
+            return list.remove(element);
+        }
+    }
+
+    public boolean contains(T element) {
+        synchronized (listLock) {
+            return list.contains(element);
+        }
+    }
+
     public void appendToFile(String toAppend) {
         synchronized(fileLock) {
             try (PrintWriter writer = new PrintWriter(new FileWriter(filename, true))) {
                 writer.println(toAppend);
             } catch (IOException e) {
                 e.printStackTrace();
+            }
+        }
+    }
+
+    public void writeListToFile() {
+        synchronized(fileLock) {
+            synchronized (listLock) {
+                try {
+                    PrintWriter pw = new PrintWriter(new FileOutputStream(filename, false));
+                    for (T element : list) {
+                        pw.println(element.toString());
+                    }
+                    pw.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

@@ -1,8 +1,5 @@
 import javax.swing.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 
@@ -12,7 +9,8 @@ public class Client {
 
     public static void main(String[] args) {
         Client client = new Client();
-        
+
+        Socket socket;
         try {
             socket = new Socket("localhost", 4242);
         } catch (IOException e) {
@@ -55,6 +53,7 @@ public class Client {
         JOptionPane.showMessageDialog(null, message,
                 "Apartments Messager", JOptionPane.ERROR_MESSAGE);
     }
+
     private boolean processCommand(String commandHeader, BufferedReader reader, PrintWriter writer) {
         boolean success = switch (commandHeader) {
             /*
@@ -86,7 +85,7 @@ public class Client {
         return success;
     }
 
-    private String getMultilineString(BufferedReader reader) {
+    private String[] getStringArray(BufferedReader reader) {
         int lines;
         try {
             lines = Integer.parseInt(reader.readLine());
@@ -95,7 +94,7 @@ public class Client {
         }
 
         ArrayList<String> strings = new ArrayList<>();
-        for (int i = 0; i < lines; i ++) {
+        for (int i = 0; i < lines; i++) {
             try {
                 strings.add(reader.readLine());
             } catch (IOException e) {
@@ -103,18 +102,31 @@ public class Client {
             }
         }
 
-        return String.join("\n", strings);
+        String[] returnArray = new String[strings.size()];
+        for(int i = 0; i < strings.size(); i++) {
+            returnArray[i] = strings.get(i);
+        }
+
+        return returnArray;
     }
 
     private boolean handleInput(BufferedReader reader, PrintWriter writer) {
-        String message = getMultilineString(reader);
+        String[] message = getStringArray(reader);
         if (message == null)
             return false;
 
-        String result = JOptionPane.showInputDialog(null,
-                message, "Apartments Messager", JOptionPane.QUESTION_MESSAGE);
+        String result;
+        if(message.length > 8) {
+            JList scrollable = new JList<>(message);
+            JScrollPane scrollPane = new JScrollPane(scrollable);
+            result = JOptionPane.showInputDialog(null,
+                    scrollPane, "Apartments Messager", JOptionPane.QUESTION_MESSAGE);
+        } else {
+            result = JOptionPane.showInputDialog(null,
+                    message, "Apartments Messager", JOptionPane.QUESTION_MESSAGE);
+        }
 
-        if(result == null) {
+        if (result == null) {
             try {
                 socket.close();
             } catch (IOException e) {
@@ -128,7 +140,7 @@ public class Client {
     }
 
     private boolean handleOptions(BufferedReader reader, PrintWriter writer) {
-        String message = getMultilineString(reader);
+        String[] message = getStringArray(reader);
         if (message == null)
             return false;
 
@@ -147,7 +159,7 @@ public class Client {
 
         String result = String.valueOf(intResultAdjusted);
 
-        if(result.equalsIgnoreCase("0")) {
+        if (result.equalsIgnoreCase("0")) {
             try {
                 socket.close();
             } catch (IOException e) {
@@ -161,7 +173,7 @@ public class Client {
     }
 
     private boolean handleMessage(BufferedReader reader) {
-        String message = getMultilineString(reader);
+        String[] message = getStringArray(reader);
         if (message == null) {
             return false;
         }
@@ -173,10 +185,16 @@ public class Client {
             createErrorMessage("Could not read from server.");
             return false;
         }
+        if(message.length > 8) {
+            JList scrollable = new JList<>(message);
+            JScrollPane scrollPane = new JScrollPane(scrollable);
+            JOptionPane.showMessageDialog(null, scrollPane,
+                    "Apartments Messager", messageType);
+        } else {
+            JOptionPane.showMessageDialog(null, message,
+                    "Apartments Messager", messageType);
+        }
 
-
-        JOptionPane.showMessageDialog(null, message,
-                "Apartments Messager", messageType);
 
         return true;
     }
