@@ -31,7 +31,6 @@ public class ConversationManager {
                 locks.put(filename, new Object());
             }
             
-            conversations.put(filename, conversation);
         }
     }
 
