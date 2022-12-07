@@ -84,10 +84,11 @@ public class ConversationManager {
     }
 
     public static void sendMessage(User user, User recipient, String message) {
+        ArrayList<Message> recipientConversation;
         String userName = user.getUsername();
         String recipientName = recipient.getUsername();
         String filename = userName + "-" + recipientName + ".txt";
-        String reverseFile = recipient + "-" + user + ".txt";
+        String reverseFile = recipientName + "-" + user + ".txt";
         synchronized(locks.get(filename)) {
             user.sendMessage(message, conversations.get(filename), conversations.get(reverseFile));
         }
@@ -106,7 +107,7 @@ public class ConversationManager {
         String userName = user.getUsername();
         String recipientName = recipient.getUsername();
         String filename = userName + "-" + recipientName + ".txt";
-        String reverseFile = recipient + "-" + user + ".txt";
+        String reverseFile = recipientName + "-" + user + ".txt";
         synchronized(locks.get(filename)) {
             return user.editMessage(messageID, newMessage, conversations.get(filename), conversations.get(reverseFile), user, writer);
         }

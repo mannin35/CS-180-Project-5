@@ -1,0 +1,12 @@
+rei
+mannin35
+password
+seller
+
+
+reiBuyer
+mannin
+password
+buyer
+
+
