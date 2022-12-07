@@ -1,3 +1,5 @@
+import javax.swing.*;
+import java.io.PrintWriter;
 import java.util.*;
 
 /**
@@ -69,7 +71,7 @@ public class User {
     //Loops through each arraylist until finding message with correct ID,
     //Then sets that element to be a Message with updated message String
     public boolean editMessage(int messageID, String newMessage, ArrayList<Message> user,
-                               ArrayList<Message> recipient, User editor) {
+                               ArrayList<Message> recipient, User editor, PrintWriter writer) {
         boolean idExists = false;
         boolean edited = false;
         for (int i = 0; i < user.size(); i++) {
@@ -78,7 +80,7 @@ public class User {
                     user.set(i, new Message(username, newMessage, messageID));
                     edited = true;
                 } else {
-                    System.out.println("You may only edit messages that you have sent!");
+                    ServerProcessor.sendMessage(writer, "You may only edit messages that you have sent!", JOptionPane.ERROR_MESSAGE);
                 }
                 idExists = true;
             }
@@ -92,7 +94,7 @@ public class User {
             }
         }
         if (!idExists) {
-            System.out.println("Please enter a valid message ID!");
+            ServerProcessor.sendMessage(writer, "Please enter a valid message ID!", JOptionPane.ERROR_MESSAGE);
         }
         return edited;
     }
