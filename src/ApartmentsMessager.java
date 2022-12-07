@@ -472,9 +472,8 @@ public class ApartmentsMessager {
                                                     // the search. THen, gets the seller who owns that store
                                                     for (int i = 0; i < AccountManager.stores.size(); i++) {
                                                         if (AccountManager.stores.get(i).getName().equalsIgnoreCase(storeChoice)) {
-                                                            main.recipient =
-                                                                    AccountManager.getUserFromUsername(AccountManager.stores.get(i)
-                                                                            .getSeller());
+                                                            main.setRecipient(AccountManager
+                                                                    .getUserFromUsername(AccountManager.stores.get(i).getSeller()));
                                                         }
                                                     }
                                                     if (main.recipient == null) {
