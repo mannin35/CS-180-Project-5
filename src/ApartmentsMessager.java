@@ -310,7 +310,7 @@ public class ApartmentsMessager {
                                                         String editedMessage = ServerProcessor.sendInput(writer, reader,
                                                                 "What would you like to edit the message to?");
                                                         messageEdited = ConversationManager.editMessage(main.currentUser, main.recipient,
-                                                                messageID, editedMessage);
+                                                                messageID, editedMessage, writer);
                                                     }
                                                     if (messageEdited) {
                                                         ServerProcessor.sendMessage(writer, "Message edited successfully!",
@@ -584,7 +584,7 @@ public class ApartmentsMessager {
                                                     if (messageID != -1) {
                                                         String editedMessage = ServerProcessor.sendInput(writer, reader, "What would you like to edit the message to?");
                                                         messageEdited = ConversationManager.editMessage(main.currentUser,
-                                                                main.recipient, messageID, editedMessage);
+                                                                main.recipient, messageID, editedMessage, writer);
                                                     }
                                                     if (messageEdited) {
                                                         ServerProcessor.sendMessage(writer, "Message edited successfully!", JOptionPane.PLAIN_MESSAGE);

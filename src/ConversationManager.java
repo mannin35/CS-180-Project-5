@@ -102,13 +102,13 @@ public class ConversationManager {
         }
     }
 
-    public static boolean editMessage(User user, User recipient, int messageID, String newMessage) {
+    public static boolean editMessage(User user, User recipient, int messageID, String newMessage, PrintWriter writer) {
         String userName = user.getUsername();
         String recipientName = recipient.getUsername();
         String filename = userName + "-" + recipientName + ".txt";
         String reverseFile = recipient + "-" + user + ".txt";
         synchronized(locks.get(filename)) {
-            return user.editMessage(messageID, newMessage, conversations.get(filename), conversations.get(reverseFile), user);
+            return user.editMessage(messageID, newMessage, conversations.get(filename), conversations.get(reverseFile), user, writer);
         }
     }
 
