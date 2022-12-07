@@ -94,7 +94,7 @@ public class ApartmentsMessager {
                     if (login.equals("1")) {
                         String username = ServerProcessor.sendInput(writer, reader, "Enter username: ");
                         String password = ServerProcessor.sendInput(writer, reader, "Enter password: ");
-                        main.currentUser = AccountManager.logIn(username, password);
+                        main.currentUser = AccountManager.logIn(username, password, writer);
                         if (main.currentUser != null) {
                             loggedIn = true;
                         }
@@ -115,7 +115,7 @@ public class ApartmentsMessager {
                                 ServerProcessor.sendMessage(writer, "Please type B for buyer or S for seller!", JOptionPane.ERROR_MESSAGE);
                             }
                         } while (!(buyerOrSeller.equalsIgnoreCase("S")) && !buyerOrSeller.equalsIgnoreCase("B"));
-                        main.currentUser = AccountManager.register(email, username, password, isSeller);
+                        main.currentUser = AccountManager.register(email, username, password, isSeller, writer);
                         if (main.currentUser != null) {
                             loggedIn = true;
                         }
@@ -258,7 +258,7 @@ public class ApartmentsMessager {
                                                             String importFileName = ServerProcessor.sendInput(writer, reader,
                                                                     "Please enter the name of the file you would " +
                                                                             "like to import");
-                                                            fileMessage = FileImportExport.importFile(importFileName);
+                                                            fileMessage = FileImportExport.importFile(importFileName, writer);
                                                             if (!fileMessage.equals("")) {
                                                                 ConversationManager.sendMessage(main.currentUser, main.recipient, fileMessage);
                                                             }
@@ -310,7 +310,7 @@ public class ApartmentsMessager {
                                                         String editedMessage = ServerProcessor.sendInput(writer, reader,
                                                                 "What would you like to edit the message to?");
                                                         messageEdited = ConversationManager.editMessage(main.currentUser, main.recipient,
-                                                                messageID, editedMessage);
+                                                                messageID, editedMessage, writer);
                                                     }
                                                     if (messageEdited) {
                                                         ServerProcessor.sendMessage(writer, "Message edited successfully!",
@@ -360,7 +360,7 @@ public class ApartmentsMessager {
                                                 //export conversation history
                                             } else if (messageMenuChoice.equals("5")) {
                                                 FileImportExport.exportCSV(main.currentUser.getUsername(), main.recipient.getUsername(),
-                                                        main.getCurrentConvo());
+                                                        main.getCurrentConvo(), writer);
                                                 ServerProcessor.sendMessage(writer, "Conversation exported successfully!", JOptionPane.PLAIN_MESSAGE);
                                             } else if (messageMenuChoice.equals("6")) {
                                                 break;
@@ -542,7 +542,7 @@ public class ApartmentsMessager {
                                                         while (fileMessage.equals("")) {
                                                             String importFileName = ServerProcessor.sendInput(writer, reader, "Please enter the name of the file you would " +
                                                                     "like to import");
-                                                            fileMessage = FileImportExport.importFile(importFileName);
+                                                            fileMessage = FileImportExport.importFile(importFileName, writer);
                                                             if (!fileMessage.equals("")) {
                                                                 ConversationManager.sendMessage(main.currentUser, main.recipient, fileMessage);
                                                             }
@@ -584,7 +584,7 @@ public class ApartmentsMessager {
                                                     if (messageID != -1) {
                                                         String editedMessage = ServerProcessor.sendInput(writer, reader, "What would you like to edit the message to?");
                                                         messageEdited = ConversationManager.editMessage(main.currentUser,
-                                                                main.recipient, messageID, editedMessage);
+                                                                main.recipient, messageID, editedMessage, writer);
                                                     }
                                                     if (messageEdited) {
                                                         ServerProcessor.sendMessage(writer, "Message edited successfully!", JOptionPane.PLAIN_MESSAGE);
@@ -630,7 +630,7 @@ public class ApartmentsMessager {
                                                 //export message
                                             } else if (messageMenuChoice.equals("5")) {
                                                 FileImportExport.exportCSV(main.currentUser.getUsername(), main.recipient.getUsername(),
-                                                        main.getCurrentConvo());
+                                                        main.getCurrentConvo(), writer);
                                                 ServerProcessor.sendMessage(writer, "Conversation exported successfully!", JOptionPane.PLAIN_MESSAGE);
                                                 //quit to main menu
                                             } else if (messageMenuChoice.equals("6")) {

@@ -1,3 +1,6 @@
+import javax.swing.*;
+import java.io.BufferedReader;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -31,14 +34,14 @@ public class AccountManager {
     // Returns the created user object with given user fields
     // Returns null if user already exists or username contains commas
     // Also adds user to accounts.txt and accounts/buyers/sellers arraylists
-    public static User register(String email, String username, String password, boolean isSeller) {
+    public static User register(String email, String username, String password, boolean isSeller, PrintWriter writer) {
         if (findUser(username) != null) {
-            System.out.println("A user with this username already exists!");
+            ServerProcessor.sendMessage(writer, "A user with this username already exists!", JOptionPane.ERROR_MESSAGE);
             return null;
         }
 
         if (username.contains(",")) {
-            System.out.println("Username may not contain commas!");
+            ServerProcessor.sendMessage(writer, "Username may not contain commas!", JOptionPane.ERROR_MESSAGE);
             return null;
         }
 
@@ -58,18 +61,18 @@ public class AccountManager {
 
     // Returns the user with given username and password
     // Returns null if credentials are wrong
-    public static User logIn(String username, String password) {
+    public static User logIn(String username, String password, PrintWriter writer) {
         User foundUser = findUser(username);
 
         if (foundUser == null) {
-            System.out.println("User doesn't exist!");
+            ServerProcessor.sendMessage(writer, "User doesn't exist!", JOptionPane.ERROR_MESSAGE);
             return null;
         }
 
         if (foundUser.getPassword().equals(password)) {
             return foundUser;
         } else {
-            System.out.println("Incorrect password for user!");
+           ServerProcessor.sendMessage(writer, "Incorrect password for user!", JOptionPane.ERROR_MESSAGE);
             return null;
         }
     }
