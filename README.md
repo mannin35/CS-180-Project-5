@@ -79,7 +79,7 @@ conversation arraylists of Messages.
 
 `writeMessages` - writes the messages in the message arraylists back to the conversation history files.
 
-##### ClientHandler (Class)
+#### ClientHandler (Class)
 
 `ClientHandler` - constructor that takes in a socket and initializes the field clientSocket.
 
