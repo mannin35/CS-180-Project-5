@@ -530,7 +530,7 @@ public class ApartmentsMessager {
                                             } else if (messageMenuChoice.equals("2")) {
                                                 String messageType = "";
                                                 do {
-                                                    messageType = ServerProcessor.sendOptions(writer, reader, "Would you like to:\n1. Send a message\nw. Send a file",
+                                                    messageType = ServerProcessor.sendOptions(writer, reader, "Would you like to:\n1. Send a message\n2. Send a file",
                                                             new String[] {"1", "2"});
                                                     //send new message by typing input
                                                     if (messageType.equals("1")) {
