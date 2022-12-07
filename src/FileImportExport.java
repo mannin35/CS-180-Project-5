@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.util.*;
 import java.io.*;
 
@@ -14,7 +15,7 @@ import java.io.*;
 public class FileImportExport {
     // Allows us to get whatever is in the file and return it as a string to be
     // added as a message in a Message Object
-    public static String importFile(String fileName) {
+    public static String importFile(String fileName, PrintWriter writer) {
         String returnValue = "";
         try {
             FileReader fr = new FileReader(fileName);
@@ -28,16 +29,16 @@ public class FileImportExport {
             }
             bfr.close();
         } catch (FileNotFoundException e) {
-            System.out.println("Import File Error!");
+            ServerProcessor.sendMessage(writer, "Import File Error!", JOptionPane.ERROR_MESSAGE);
         } catch (IOException e) {
-            System.out.println("Import File Error!");
+            ServerProcessor.sendMessage(writer, "Import File Error!", JOptionPane.ERROR_MESSAGE);
         }
         return returnValue;
     }
 
     // Goes through each mesage object in messageToCSV and writes them in the format
     // [timeStamp,username,messageID,message]
-    public static void exportCSV(String currentUser, String otherUser, ArrayList<Message> messageToCSV) {
+    public static void exportCSV(String currentUser, String otherUser, ArrayList<Message> messageToCSV, PrintWriter writer) {
         String actualFile = ((currentUser) + "-" + (otherUser) + "-EXPORT" + ".csv");
         File input = new File(actualFile);
         try {
@@ -50,7 +51,7 @@ public class FileImportExport {
             }
             bw.close();
         } catch (IOException e) {
-            System.out.println("Export CSV Error!");
+            ServerProcessor.sendMessage(writer, "Export CSV Error!", JOptionPane.ERROR_MESSAGE);
         }
     }
 }
