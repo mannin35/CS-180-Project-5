@@ -51,7 +51,7 @@ public class ConversationManager {
                 setConversation(filename, conversation);
 
                 ArrayList<Message> otherConversation = readConversation(reverseFile);
-                setConversation(reverseFile, otherConversation);
+                conversations.put(reverseFile, otherConversation);
             }
         }
     }

@@ -159,8 +159,8 @@ public class ApartmentsMessager {
                                     String buyerSearch = "";
                                     //loops until user successfully chooses a person to message
                                     while (main.recipient == null && !buyerSearch.equals("3")) {
-                                        buyerSearch = ServerProcessor.sendOptions(writer, reader, "Would you like to:" +
-                                                        "1. See list of buyers" +
+                                        buyerSearch = ServerProcessor.sendOptions(writer, reader, "Would you like to:\n" +
+                                                        "1. See list of buyers\n" +
                                                         "2. Search for a buyer",
                                                 new String[]{"1", "2"});
                                         if (buyerSearch.equals("1")) {
@@ -720,7 +720,7 @@ public class ApartmentsMessager {
         }
 
         if (recipientArg != null) {
-            ConversationManager.openConversation(this.currentUser.getUsername(), this.recipient.getUsername());
+            ConversationManager.openConversation(this.currentUser.getUsername(), recipientArg.getUsername());
         }
 
         this.recipient = recipientArg;
