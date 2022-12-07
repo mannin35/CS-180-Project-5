@@ -463,7 +463,7 @@ public class ApartmentsMessager {
                                             } else {
                                                 String storeListString = "";
                                                 for (int i = 0; i < AccountManager.stores.size(); i++) {
-                                                    storeListString = storeListString + AccountManager.stores.get(i) + "\n";
+                                                    storeListString = storeListString + AccountManager.stores.get(i).getName() + "\n";
                                                 }
                                                 ServerProcessor.sendMessage(writer, storeListString, JOptionPane.PLAIN_MESSAGE);
                                                 do {
