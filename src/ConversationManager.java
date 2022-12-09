@@ -84,7 +84,6 @@ public class ConversationManager {
     }
 
     public static void sendMessage(User user, User recipient, String message) {
-        ArrayList<Message> recipientConversation;
         String userName = user.getUsername();
         String recipientName = recipient.getUsername();
         String filename = userName + "-" + recipientName + ".txt";

@@ -79,6 +79,19 @@ public class Client {
                 [contents] * [number of lines]
              */
             case "input" -> handleInput(reader, writer);
+            /*
+            Command looks like:
+                import
+                filename
+            */
+            case "import" -> handleImport(reader, writer);
+            /*
+            Command looks like:
+                export
+                [number of lines in contents]
+                [contents] * [number of lines]
+             */
+            case "export" -> handleExport(reader, writer);
             default -> true;
         };
 
@@ -196,6 +209,68 @@ public class Client {
         }
 
 
+        return true;
+    }
+
+    private boolean handleImport(BufferedReader reader, PrintWriter writer) {
+        String filename = "";
+        try {
+            filename = reader.readLine();
+        } catch (IOException e) {
+            return false;
+        }
+        //Get contents from file and send it to server
+        //Null String represents error (or empty file)
+        String returnValue = "";
+        try {
+            FileReader fr = new FileReader(filename);
+            BufferedReader bfr = new BufferedReader(fr);
+
+            String line = bfr.readLine();
+
+            while (line != null) {
+                returnValue += line;
+                line = bfr.readLine();
+            }
+            bfr.close();
+            writer.println(returnValue);
+        } catch (FileNotFoundException e) {
+            writer.println("");
+        } catch (IOException e) {
+            writer.println("");
+        }
+        writer.flush();
+        return true;
+    }
+
+    private boolean handleExport(BufferedReader reader, PrintWriter writer) {
+        System.out.println("HandleExport");
+        String actualFile = "";
+        try {
+            actualFile = reader.readLine();
+        } catch (IOException e) {
+            return false;
+        }
+
+        String[] message = getStringArray(reader);
+        if (message == null)
+            return false;
+        
+        File csvFile = new File(actualFile);
+        try {
+            System.out.println("Printing to csv");
+            PrintWriter pw = new PrintWriter(new FileOutputStream(csvFile, true));
+            for (String line : message) {
+                pw.println(line);
+            }
+            pw.close();
+        } catch (IOException e) {
+            writer.println("error");
+            writer.flush();
+            return true;
+        }
+        writer.println("no errors");
+        writer.flush();
         return true;
     }
 }

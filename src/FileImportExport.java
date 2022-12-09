@@ -15,43 +15,32 @@ import java.io.*;
 public class FileImportExport {
     // Allows us to get whatever is in the file and return it as a string to be
     // added as a message in a Message Object
-    public static String importFile(String fileName, PrintWriter writer) {
+    public static String importFile(String fileName, PrintWriter writer, BufferedReader reader) {
         String returnValue = "";
-        try {
-            FileReader fr = new FileReader(fileName);
-            BufferedReader bfr = new BufferedReader(fr);
-
-            String line = bfr.readLine();
-
-            while (line != null) {
-                returnValue += line;
-                line = bfr.readLine();
-            }
-            bfr.close();
-        } catch (FileNotFoundException e) {
-            ServerProcessor.sendMessage(writer, "Import File Error!", JOptionPane.ERROR_MESSAGE);
-        } catch (IOException e) {
-            ServerProcessor.sendMessage(writer, "Import File Error!", JOptionPane.ERROR_MESSAGE);
+        returnValue += ServerProcessor.importFile(writer, reader, fileName);
+        if (returnValue.equals("")) {
+            ServerProcessor.sendMessage(writer, "File Import Error!", JOptionPane.ERROR_MESSAGE);
         }
         return returnValue;
     }
 
     // Goes through each mesage object in messageToCSV and writes them in the format
     // [timeStamp,username,messageID,message]
-    public static void exportCSV(String currentUser, String otherUser, ArrayList<Message> messageToCSV, PrintWriter writer) {
+    public static void exportCSV(String currentUser, String otherUser, ArrayList<Message> messageToCSV,
+        PrintWriter writer, BufferedReader reader) {
         String actualFile = ((currentUser) + "-" + (otherUser) + "-EXPORT" + ".csv");
         File input = new File(actualFile);
-        try {
-            BufferedWriter bw = new BufferedWriter(new FileWriter(input, false));
-            for (int i = 0; i < messageToCSV.size(); i++) {
-                bw.write(messageToCSV.get(i).getTimeStamp() +
-                        "," + messageToCSV.get(i).getUsername() +
-                        "," + messageToCSV.get(i).getMessageID() +
-                        "," + messageToCSV.get(i).getMessage() + "\n");
+        String csv = "";
+        for (int i = 0; i < messageToCSV.size(); i++) {
+            csv += messageToCSV.get(i).getTimeStamp() +
+                "," + messageToCSV.get(i).getUsername() +
+                "," + messageToCSV.get(i).getMessageID() +
+                "," + messageToCSV.get(i).getMessage() + "\n";
             }
-            bw.close();
-        } catch (IOException e) {
+        boolean success = ServerProcessor.exportCSV(writer, reader, actualFile, csv);
+        if (!success) {
             ServerProcessor.sendMessage(writer, "Export CSV Error!", JOptionPane.ERROR_MESSAGE);
         }
+        
     }
 }

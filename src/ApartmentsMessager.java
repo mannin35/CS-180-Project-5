@@ -260,7 +260,7 @@ public class ApartmentsMessager {
                                                             String importFileName = ServerProcessor.sendInput(writer, reader,
                                                                     "Please enter the name of the file you would " +
                                                                             "like to import");
-                                                            fileMessage = FileImportExport.importFile(importFileName, writer);
+                                                            fileMessage = FileImportExport.importFile(importFileName, writer, reader);
                                                             if (!fileMessage.equals("")) {
                                                                 ConversationManager.sendMessage(main.currentUser, main.recipient, fileMessage);
                                                             }
@@ -362,7 +362,7 @@ public class ApartmentsMessager {
                                                 //export conversation history
                                             } else if (messageMenuChoice.equals("5")) {
                                                 FileImportExport.exportCSV(main.currentUser.getUsername(), main.recipient.getUsername(),
-                                                        main.getCurrentConvo(), writer);
+                                                        main.getCurrentConvo(), writer, reader);
                                                 ServerProcessor.sendMessage(writer, "Conversation exported successfully!", JOptionPane.PLAIN_MESSAGE);
                                             } else if (messageMenuChoice.equals("6")) {
                                                 break;
@@ -547,7 +547,7 @@ public class ApartmentsMessager {
                                                         while (fileMessage.equals("")) {
                                                             String importFileName = ServerProcessor.sendInput(writer, reader, "Please enter the name of the file you would " +
                                                                     "like to import");
-                                                            fileMessage = FileImportExport.importFile(importFileName, writer);
+                                                            fileMessage = FileImportExport.importFile(importFileName, writer, reader);
                                                             if (!fileMessage.equals("")) {
                                                                 ConversationManager.sendMessage(main.currentUser, main.recipient, fileMessage);
                                                             }
@@ -635,7 +635,7 @@ public class ApartmentsMessager {
                                                 //export message
                                             } else if (messageMenuChoice.equals("5")) {
                                                 FileImportExport.exportCSV(main.currentUser.getUsername(), main.recipient.getUsername(),
-                                                        main.getCurrentConvo(), writer);
+                                                        main.getCurrentConvo(), writer, reader);
                                                 ServerProcessor.sendMessage(writer, "Conversation exported successfully!", JOptionPane.PLAIN_MESSAGE);
                                                 //quit to main menu
                                             } else if (messageMenuChoice.equals("6")) {
