@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 public class ServerProcessor {
     public static String sendInput(PrintWriter writer, BufferedReader reader, String message) {
@@ -54,8 +55,43 @@ public class ServerProcessor {
         writer.flush();
     }
 
-    public static void importFile(PrintWriter writer, BufferedReader reader, String filename) {
-        
+    public static String importFile(PrintWriter writer, BufferedReader reader, String filename) {
+        String contents = "";
+
+        writer.println("import");
+        writer.println(filename);
+        writer.flush();
+        try {
+            contents += reader.readLine();
+        } catch (IOException e) {
+            return "";
+        }
+        return contents;
+    }
+
+    public static boolean exportCSV(PrintWriter writer, BufferedReader reader, String filename, String csv) {
+        String[] splitMessage = csv.split("\n");
+        int messageLines = splitMessage.length;
+
+        writer.println("export");
+        writer.println(filename);
+        writer.println(messageLines);
+        for(String line: splitMessage) {
+            writer.println(line);
+        }
+        writer.flush();
+        System.out.println("ExportSentToClient");
+        try {
+            String result = reader.readLine();
+            if (result.equals("error")) {
+                return false;
+            }
+            else {
+                return true;
+            }
+        } catch (IOException e) {
+            return false;
+        }
     }
 }
 
