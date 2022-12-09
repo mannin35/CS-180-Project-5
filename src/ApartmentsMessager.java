@@ -235,12 +235,14 @@ public class ApartmentsMessager {
                                             //Prints out message history of user
                                             if (messageMenuChoice.equals("1")) {
                                                 String messageHistory = "";
-                                                for (int i = 0; i < main.getCurrentConvo().size() - 1; i++) {
-                                                    messageHistory += main.getCurrentConvo().get(i);
-                                                    messageHistory += "\n";
+                                                for (Message m : main.getCurrentConvo()) {
+                                                    messageHistory = messageHistory + m.toString() + "\n";
                                                 }
-                                                messageHistory += main.getCurrentConvo().get(main.getCurrentConvo().size() - 1);
-                                                ServerProcessor.sendMessage(writer, messageHistory, JOptionPane.PLAIN_MESSAGE);
+                                                if (messageHistory == "") {
+                                                    ServerProcessor.sendMessage(writer, "There is currently no conversation for you to view.", JOptionPane.ERROR_MESSAGE);
+                                                } else {
+                                                    ServerProcessor.sendMessage(writer, messageHistory, JOptionPane.PLAIN_MESSAGE);
+                                                }
                                                 //send message
                                             } else if (messageMenuChoice.equals("2")) {
                                                 String messageType = "";
@@ -524,7 +526,11 @@ public class ApartmentsMessager {
                                                 for (Message m : main.getCurrentConvo()) {
                                                     currentConvoString = currentConvoString + m.toString() + "\n";
                                                 }
-                                                ServerProcessor.sendMessage(writer, currentConvoString, JOptionPane.PLAIN_MESSAGE);
+                                                if (currentConvoString == "") {
+                                                    ServerProcessor.sendMessage(writer, "There is currently no conversation for you to view.", JOptionPane.ERROR_MESSAGE);
+                                                } else {
+                                                    ServerProcessor.sendMessage(writer, currentConvoString, JOptionPane.PLAIN_MESSAGE);
+                                                }
                                                 //send message
                                             } else if (messageMenuChoice.equals("2")) {
                                                 String messageType = "";
