@@ -23,13 +23,13 @@ Create a Buyer:
 7. User enter ‘S and presses ‘OK’
 8. User gets ‘You are now logged in as testSeller’
 
-Test 1: User Register
+Test 1: User Register  
 Steps:
 1. Create a Buyer
 2. Check ‘account.txt’ file for credentials  
 Test 1 Status: PASSED
 
-Test 2: User log in
+Test 2: User log in  
 Steps:
 1. Create a Seller
 2. User launches an application
@@ -41,7 +41,7 @@ Steps:
 8. EXIT by pressing ‘X’  
 Test 2 Status: PASSED
 
-Test 3: Buyer messages Seller through Stores
+Test 3: Buyer messages Seller through Stores  
 Steps:
 1. Create a Seller
 2. Seller selects 2 for ‘Create a Store’
@@ -58,7 +58,7 @@ Steps:
 13. Check ‘testBuyer-testSeller.txt’ file to see if message is sent  
 Test 3 Status: PASSED
 
-Test 4: Buyer messages Seller through List
+Test 4: Buyer messages Seller through List  
 Steps:
 1. Create a Seller
 2. Seller selects 2 for ‘Create a Store’
@@ -75,7 +75,7 @@ Steps:
 13. Check ‘testBuyer-testSeller.txt’ file to see if message is sent  
 Test 4 Status: PASSED
 
-Test 5: Seller messages Buyer through List
+Test 5: Seller messages Buyer through List  
 Steps:
 1. Create a Buyer
 2. EXIT by pressing ‘X’
@@ -89,7 +89,7 @@ Steps:
 10. Check ‘testBuyer-testSeller.txt’ file to see if message is sent  
 Test 5 Status: PASSED
 
-Test 6: Seller messages Buyer through Search
+Test 6: Seller messages Buyer through Search  
 Steps:
 1. Create a Buyer
 2. EXIT by pressing ‘X’
@@ -103,7 +103,7 @@ Steps:
 10. Check ‘testBuyer-testSeller.txt’ file to see if message is sent  
 Test 6 Status: PASSED
 
-Test 7: Buyer blocks Seller
+Test 7: Buyer blocks Seller  
 Steps:
 1. Create a Seller
 2. EXIT by pressing ‘X’
@@ -113,7 +113,7 @@ Steps:
 6. Check ‘accounts.txt’ to see if ‘testBuyer’ has ‘testSeller’ in blocked list  
 Test 7 Status: PASSED
 
-Test 8: Buyer becomes invisible to Seller
+Test 8: Buyer becomes invisible to Seller  
 Steps:
 1. Create a Seller
 2. EXIT by pressing ‘X’
@@ -123,7 +123,7 @@ Steps:
 6. Check ‘accounts.txt’ to see if ‘testBuyer’ has ‘testSeller’ in invisible list  
 Test 8 Status: PASSED
 
-Test 9: Seller blocks Buyer
+Test 9: Seller blocks Buyer  
 Steps:
 1. Create a Buyer
 2. EXIT by pressing ‘X’
@@ -133,7 +133,7 @@ Steps:
 6. Check ‘accounts.txt’ to see if ‘testSeller’ has ‘testBuyer’ in blocked list  
 Test 9 Status: PASSED
 
-Test 10: Seller becomes invisible to Buyer
+Test 10: Seller becomes invisible to Buyer  
 Steps:
 1. Create a Buyer
 2. EXIT by pressing ‘X’
@@ -143,7 +143,7 @@ Steps:
 6. Check ‘accounts.txt’ to see if ‘testSeller’ has ‘testBuyer’ in invisible list  
 Test 10 Status: PASSED
 
-Test 11: Seller imports ‘.txt’ file
+Test 11: Seller imports ‘.txt’ file  
 Steps:
 1. Create a Buyer
 2. EXIT by pressing ‘X’
@@ -158,7 +158,7 @@ Steps:
 11. Check ‘testBuyer-testSeller.txt’ file to see if it contains ‘hello’  
 Test 11 Status: PASSED
 
-Test 12: Buyer exports ‘.txt’ file
+Test 12: Buyer exports ‘.txt’ file  
 Steps:
 1. Create a Seller
 2. Seller selects 2 for ‘Create a Store’
@@ -175,7 +175,7 @@ Steps:
 13. Check ‘testBuyer-testSeller.csv’ file to see if it contains conversation history  
 Test 12 Status: PASSED
 
-Test 13: Buyer edits message to Seller
+Test 13: Buyer edits message to Seller  
 Steps:
 1. Create a Seller
 2. Seller selects 2 for ‘Create a Store’
@@ -195,7 +195,7 @@ Steps:
 16. Check ‘testBuyer-testSeller.txt’ file to see if it contains ‘new hello’  
 Test 13 Status: PASSED
 
-Test 14: Seller deletes message to Buyer
+Test 14: Seller deletes message to Buyer  
 Steps:
 1. Create a Buyer
 2. EXIT by pressing ‘X’
@@ -212,7 +212,7 @@ Steps:
 13. Check ‘testSeller-testBuyer.txt’ file to see if it is empty  
 Test 14 Status: PASSED
 
-Test 15: Seller creates a Store
+Test 15: Seller creates a Store  
 Steps:
 1. Create a Seller
 2. Seller selects 2 for ‘Create a store’
@@ -220,7 +220,7 @@ Steps:
 4. Check ‘accounts.txt’ to see ‘testSeller’ has ‘testSellerStore’ in store list  
 Test 15 Status: PASSED
 
-Test 16: User does not exist for Login
+Test 16: User does not exist for Login  
 Steps:
 1. User selects 1 for ‘Login’
 2. User enters ‘testSeller’
@@ -228,7 +228,7 @@ Steps:
 4. ERROR message appears with ‘User doesn’t exist’  
 Test 16 Status: PASSED
 
-Test 17: User registers with comma
+Test 17: User registers with comma  
 Steps:
 1. User selects 2 for ‘Register’
 2. User enters ‘testBuyer@test.com’
@@ -238,7 +238,7 @@ Steps:
 6. ERROR message appears with ‘Username may not contain commas’  
 Test 17 Status: PASSED
 
-Test 18: User registers with existing username
+Test 18: User registers with existing username  
 Steps:
 1. Create a Buyer
 2. EXIT by pressing ‘X’
@@ -250,7 +250,7 @@ Steps:
 8. ERROR message appears with ‘A user with this username already exists’  
 Test 18 Status: PASSED
 
-Test 19: User logins with incorrect password
+Test 19: User logins with incorrect password  
 Steps: 
 1. Create a Buyer
 2. EXIT by pressing ‘X’
@@ -260,7 +260,7 @@ Steps:
 6. ERROR message appears with ‘Incorrect password for user!’  
 Test 19 Status: PASSED
 
-Test 20: User does not enter buyer or seller when Registering
+Test 20: User does not enter buyer or seller when Registering  
 Steps:
 1. User selects 2 for ‘Register’
 2. User enters ‘testBuyer@test.com’
