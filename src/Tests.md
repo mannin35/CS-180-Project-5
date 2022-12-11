@@ -4,24 +4,24 @@ Test Cases:
 Methods:
 
 Create a Seller:
-User launches an application
-User presses ‘OK’ on Welcome Message
-User selects 2 for ‘Register’
-User enter testBuyer@test.com and presses ‘OK’
-User enter testBuyer and presses ‘OK’
-User enter passwordBuyer and presses ‘OK’
-User enter ‘B’ and presses ‘OK’
-User gets ‘You are now logged in as testBuyer’
+  User launches an application
+  User presses ‘OK’ on Welcome Message
+  User selects 2 for ‘Register’
+  User enter testBuyer@test.com and presses ‘OK’
+  User enter testBuyer and presses ‘OK’
+  User enter passwordBuyer and presses ‘OK’
+  User enter ‘B’ and presses ‘OK’
+  User gets ‘You are now logged in as testBuyer’
 
 Create a Buyer:
-User launches an application
-User presses ‘OK’ on Welcome Message
-User selects 2 for ‘Register’
-User enter testSeller@test.com and presses ‘OK’
-User enter testSeller and presses ‘OK’
-User enter passwordSeller and presses ‘OK’
-User enter ‘S and presses ‘OK’
-User gets ‘You are now logged in as testSeller’
+  User launches an application
+  User presses ‘OK’ on Welcome Message
+  User selects 2 for ‘Register’
+  User enter testSeller@test.com and presses ‘OK’
+  User enter testSeller and presses ‘OK’
+  User enter passwordSeller and presses ‘OK’
+  User enter ‘S and presses ‘OK’
+  User gets ‘You are now logged in as testSeller’
 
 Test 1: User Register
 Steps:
