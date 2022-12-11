@@ -10,7 +10,6 @@ public class Client {
     public static void main(String[] args) {
         Client client = new Client();
 
-        Socket socket;
         try {
             socket = new Socket("localhost", 4242);
         } catch (IOException e) {
@@ -34,6 +33,9 @@ public class Client {
         }
 
         while (true) {
+            if (socket.isClosed())
+                return;
+
             String commandHeader;
             try {
                 commandHeader = reader.readLine();
@@ -140,14 +142,17 @@ public class Client {
         }
 
         if (result == null) {
+            writer.println('\0');
+            writer.flush();
             try {
                 socket.close();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+        } else {
+            writer.println(result);
+            writer.flush();
         }
-        writer.println(result);
-        writer.flush();
 
         return true;
     }
@@ -173,14 +178,17 @@ public class Client {
         String result = String.valueOf(intResultAdjusted);
 
         if (result.equalsIgnoreCase("0")) {
+            writer.println('\0');
+            writer.flush();
             try {
                 socket.close();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+        } else {
+            writer.println(result);
+            writer.flush();
         }
-        writer.println(result);
-        writer.flush();
 
         return true;
     }

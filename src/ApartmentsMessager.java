@@ -71,6 +71,9 @@ public class ApartmentsMessager {
         public void run() {
             PrintWriter writer = null;
             BufferedReader reader = null;
+
+            ApartmentsMessager main = new ApartmentsMessager();
+
             try {
 
                 // get the outputstream of client
@@ -81,8 +84,6 @@ public class ApartmentsMessager {
                 reader = new BufferedReader(
                         new InputStreamReader(
                                 clientSocket.getInputStream()));
-
-                ApartmentsMessager main = new ApartmentsMessager();
 
                 boolean loggedIn = false;
 
@@ -699,6 +700,11 @@ public class ApartmentsMessager {
 
             } catch (IOException e) {
                 e.printStackTrace();
+            } catch (UserExitException ue) {
+                AccountManager.accounts.writeListToFile();
+                AccountManager.stores.writeListToFile();
+                if (main.recipient != null)
+                    ConversationManager.closeConversation(main.currentUser.getUsername(), main.recipient.getUsername());
             } finally {
                 try {
                     if (writer != null) {
