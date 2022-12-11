@@ -4,7 +4,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 
 public class ServerProcessor {
-    public static String sendInput(PrintWriter writer, BufferedReader reader, String message) {
+    public static String sendInput(PrintWriter writer, BufferedReader reader, String message) throws UserExitException {
         String[] splitMessage = message.split("\n");
         int messageLines = splitMessage.length;
 
@@ -16,13 +16,17 @@ public class ServerProcessor {
         writer.flush();
 
         try {
-            return reader.readLine();
+            String result = reader.readLine();
+            if (result.equals("\0"))
+                throw new UserExitException("User exited the program");
+            else
+                return result;
         } catch (IOException e) {
             return null;
         }
     }
 
-    public static String sendOptions(PrintWriter writer, BufferedReader reader, String message, String[] options) {
+    public static String sendOptions(PrintWriter writer, BufferedReader reader, String message, String[] options) throws UserExitException{
         String[] splitMessage = message.split("\n");
         int messageLines = splitMessage.length;
         String optionsString = String.join(",", options);
@@ -36,7 +40,11 @@ public class ServerProcessor {
         writer.flush();
 
         try {
-            return reader.readLine();
+            String result = reader.readLine();
+            if (result.equals("\0"))
+                throw new UserExitException("User exited the program");
+            else
+                return result;
         } catch (IOException e) {
             return null;
         }
