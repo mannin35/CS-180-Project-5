@@ -4,10 +4,10 @@ Test Cases:
 Methods:
 
 Create a Seller:
-  User launches an application
-  User presses ‘OK’ on Welcome Message
-  User selects 2 for ‘Register’
-  User enter testBuyer@test.com and presses ‘OK’
+1. User launches an application
+2. User presses ‘OK’ on Welcome Message
+3. User selects 2 for ‘Register’
+4. User enter testBuyer@test.com and presses ‘OK’
   User enter testBuyer and presses ‘OK’
   User enter passwordBuyer and presses ‘OK’
   User enter ‘B’ and presses ‘OK’
