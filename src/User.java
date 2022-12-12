@@ -3,13 +3,14 @@ import java.io.PrintWriter;
 import java.util.*;
 
 /**
- * Project 5 - src.Store
- * <p>
+ * Project 5 - Store
+ *
  * Class with all the information a user has (email, password, etc.)
  * and methods that are used for sending/editing/deleting messages
  * during the program.
  *
  * @author Rei Manning, Lab Sec L15
+ *
  * @version December 12, 2022
  */
 
