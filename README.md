@@ -247,6 +247,43 @@ Applicable Test Cases:
 - Test 13: Buyer edits message to Seller
 - Test 14: Seller deletes message to Buyer
 
+### ResourceManager
+
+#### Methods
+
+`getList` - returns ArrayList<T> list within a synchronized block using Object listLock
+
+`get`- takes an int index and returns the element T of list at that index. This is done within a synchronized block using Object listLock.
+
+`add` - takes in an element T and adds it to the end of the list. This is done within a synchronized block using Object listLock.
+
+`size` - returns the size of the list, done within a synchronized block using Object listLock.
+
+`remove` - takes in an element T and attempts to remove it from the list. If successful, returns true. Otherwise returns false. This is done within a synchronized block using Object listLock.
+
+`contains` - takes in an element T and returns whether or not the list contains that element. This is done within a synchronized block using Object listLock.
+
+`appendToFile` - takes in a String toAppend and appends it to the file named String filename, a class field. This is done within a synchronized block using Object fileLock.
+
+`writeListToFile` - Synchronized using both fileLock and listLock, this method prints out the entire list, using the toString method for that list's type, to file with name filename.
+
+`readFile` - returns an ArrayList of String by adding each line from File filename to said ArrayList. This is done within a synchronized block using Object fileLock.
+ 
+#### Interactions  
+
+The instances of this class are initialized within `AccountManager` and then used repeatedly within `ApartmentsMessager` to access and change these resources.
+ 
+#### Testing
+
+- Test 2: User Login
+- Test 3: Buyer messages Seller through Stores
+- Test 4: Buyer messeges Seller through Search
+- Test 5: Seller messages Buyer through List
+- Test 6: Seller messages Buyer through Search
+- Test 15: Seller creates a Store
+- Test 16: User does not exist for Login
+- Test 18: User registers with existing username
+- Test 19: User logs in with incorrect password
 
 ### FileImportExport
 
