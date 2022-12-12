@@ -5,13 +5,11 @@ import java.util.ArrayList;
 
 /**
  * Project 5 - Client
- *
+ * <p>
  * This is the client class that interacts with the server
  *
  * @author Nick Andry, Chloe Yao Lab Sec L15
- *
  * @version December 12, 2022
- *
  */
 
 public class Client {
@@ -129,7 +127,7 @@ public class Client {
         }
 
         String[] returnArray = new String[strings.size()];
-        for(int i = 0; i < strings.size(); i++) {
+        for (int i = 0; i < strings.size(); i++) {
             returnArray[i] = strings.get(i);
         }
 
@@ -142,7 +140,7 @@ public class Client {
             return false;
 
         String result;
-        if(message.length > 8) {
+        if (message.length > 8) {
             JList scrollable = new JList<>(message);
             JScrollPane scrollPane = new JScrollPane(scrollable);
             result = JOptionPane.showInputDialog(null,
@@ -217,7 +215,7 @@ public class Client {
             createErrorMessage("Could not read from server.");
             return false;
         }
-        if(message.length > 8) {
+        if (message.length > 8) {
             JList scrollable = new JList<>(message);
             JScrollPane scrollPane = new JScrollPane(scrollable);
             JOptionPane.showMessageDialog(null, scrollPane,
@@ -273,7 +271,7 @@ public class Client {
         String[] message = getStringArray(reader);
         if (message == null)
             return false;
-        
+
         File csvFile = new File(actualFile);
         try {
             PrintWriter pw = new PrintWriter(new FileOutputStream(csvFile, true));

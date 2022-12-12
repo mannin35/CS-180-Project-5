@@ -1,11 +1,10 @@
 /**
  * Project 5 - Store
- *
+ * <p>
  * Encapsulates all the information a store has so that it
  * can be manipulated during runtime and written back to files.
  *
  * @author Rei Manning, Lab Sec L15
- *
  * @version December 12, 2022
  */
 public class Store {

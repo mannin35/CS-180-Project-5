@@ -4,13 +4,12 @@ import java.util.*;
 
 /**
  * Project 5 - Store
- *
+ * <p>
  * Class with all the information a user has (email, password, etc.)
  * and methods that are used for sending/editing/deleting messages
  * during the program.
  *
  * @author Rei Manning, Lab Sec L15
- *
  * @version December 12, 2022
  */
 
@@ -81,7 +80,8 @@ public class User {
                     user.set(i, new Message(username, newMessage, messageID));
                     edited = true;
                 } else {
-                    ServerProcessor.sendMessage(writer, "You may only edit messages that you have sent!", JOptionPane.ERROR_MESSAGE);
+                    ServerProcessor.sendMessage(writer, "You may only edit messages that you have sent!",
+                            JOptionPane.ERROR_MESSAGE);
                 }
                 idExists = true;
             }
