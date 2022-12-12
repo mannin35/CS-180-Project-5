@@ -1,5 +1,3 @@
-import java.util.*;
-
 /**
  * Project 5 - Store
  *

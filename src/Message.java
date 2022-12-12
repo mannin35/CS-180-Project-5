@@ -1,6 +1,7 @@
 // These imports helped us get the currentTime for our messages
 import java.sql.Timestamp;
 import java.time.Instant;
+
 /**
  * Project 5 - Message
  *
