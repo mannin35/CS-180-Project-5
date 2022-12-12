@@ -489,7 +489,7 @@ public class ApartmentsMessager {
                                                         ServerProcessor.sendMessage(writer, "Please enter a store from the list.", JOptionPane.ERROR_MESSAGE);
                                                     } else if (main.recipient.getBlocked()
                                                             .contains(main.currentUser.getUsername())) {
-                                                        ServerProcessor.sendMessage(writer, "You have been blocked by the owner of" +
+                                                        ServerProcessor.sendMessage(writer, "You have been blocked by the owner of " +
                                                                 storeChoice + " and may not message them", JOptionPane.ERROR_MESSAGE);
                                                         main.setRecipient(null);
                                                         break;

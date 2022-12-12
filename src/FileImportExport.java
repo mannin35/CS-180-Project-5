@@ -8,8 +8,8 @@ import java.io.*;
  * Contains functionality for importing files into a
  * conversation as well as exporting conversations into a CSV format.
  *
- * @author Arsh Batth, Lab Sec L15
- * @version November 13th, 2022
+ * @author Arsh Batth, Rei Manning Lab Sec L15
+ * @version December 12, 2022
  */
 
 public class FileImportExport {
