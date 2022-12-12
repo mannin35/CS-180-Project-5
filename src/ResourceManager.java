@@ -3,13 +3,11 @@ import java.io.*;
 
 /**
  * Project 5 - Resource Manager
- *
+ * <p>
  * This is the class that handles concurrency for all shared resources
  *
  * @author Nick Andry, Rei Manning, Lab Sec L15
-
  * @version December 12, 2022
- *
  */
 
 public class ResourceManager<T> {
@@ -24,7 +22,7 @@ public class ResourceManager<T> {
         this.fileLock = new Object();
         this.listLock = new Object();
     }
-    
+
 
     public ResourceManager() {
         this.list = new ArrayList<T>();
@@ -32,18 +30,19 @@ public class ResourceManager<T> {
     }
 
     public ArrayList<T> getList() {
-        synchronized(listLock) {
+        synchronized (listLock) {
             return list;
         }
     }
+
     public T get(int index) {
-        synchronized(listLock) {
+        synchronized (listLock) {
             return list.get(index);
         }
     }
 
     public void add(T element) {
-        synchronized(listLock) {
+        synchronized (listLock) {
             list.add(element);
         }
     }
@@ -67,7 +66,7 @@ public class ResourceManager<T> {
     }
 
     public void appendToFile(String toAppend) {
-        synchronized(fileLock) {
+        synchronized (fileLock) {
             try (PrintWriter writer = new PrintWriter(new FileWriter(filename, true))) {
                 writer.println(toAppend);
             } catch (IOException e) {
@@ -77,7 +76,7 @@ public class ResourceManager<T> {
     }
 
     public void writeListToFile() {
-        synchronized(fileLock) {
+        synchronized (fileLock) {
             synchronized (listLock) {
                 try {
                     PrintWriter pw = new PrintWriter(new FileOutputStream(filename, false));
@@ -94,7 +93,7 @@ public class ResourceManager<T> {
 
     public ArrayList<String> readFile() {
         // Create file (does nothing if it already exists)
-        synchronized(fileLock) {
+        synchronized (fileLock) {
             File file = new File(filename);
             try {
                 file.createNewFile();

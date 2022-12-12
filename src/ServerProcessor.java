@@ -4,13 +4,11 @@ import java.io.PrintWriter;
 
 /**
  * Project 5 - Server Processor
- *
+ * <p>
  * This is the class that facilitates communication between the server and client classes
  *
  * @author Nick Andry, Lab Sec L15
- *
  * @version December 12, 2022
- *
  */
 
 public class ServerProcessor {
@@ -20,7 +18,7 @@ public class ServerProcessor {
 
         writer.println("input");
         writer.println(messageLines);
-        for (String line: splitMessage) {
+        for (String line : splitMessage) {
             writer.println(line);
         }
         writer.flush();
@@ -36,14 +34,14 @@ public class ServerProcessor {
         }
     }
 
-    public static String sendOptions(PrintWriter writer, BufferedReader reader, String message, String[] options) throws UserExitException{
+    public static String sendOptions(PrintWriter writer, BufferedReader reader, String message, String[] options) throws UserExitException {
         String[] splitMessage = message.split("\n");
         int messageLines = splitMessage.length;
         String optionsString = String.join(",", options);
 
         writer.println("options");
         writer.println(messageLines);
-        for (String line: splitMessage) {
+        for (String line : splitMessage) {
             writer.println(line);
         }
         writer.println(optionsString);
@@ -66,7 +64,7 @@ public class ServerProcessor {
 
         writer.println("message");
         writer.println(messageLines);
-        for(String line: splitMessage) {
+        for (String line : splitMessage) {
             writer.println(line);
         }
         writer.println(messageType);
@@ -94,7 +92,7 @@ public class ServerProcessor {
         writer.println("export");
         writer.println(filename);
         writer.println(messageLines);
-        for(String line: splitMessage) {
+        for (String line : splitMessage) {
             writer.println(line);
         }
         writer.flush();
@@ -102,8 +100,7 @@ public class ServerProcessor {
             String result = reader.readLine();
             if (result.equals("error")) {
                 return false;
-            }
-            else {
+            } else {
                 return true;
             }
         } catch (IOException e) {

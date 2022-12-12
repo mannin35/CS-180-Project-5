@@ -3,13 +3,11 @@ import java.util.*;
 
 /**
  * Project 5 - Conversation Manager
- *
+ * <p>
  * This is the class that handles concurrency for methods and resources regarding conversations
  *
  * @author Nick Andry, Rei Manning, Lab Sec L15
- *
  * @version December 12, 2022
- *
  */
 
 public class ConversationManager {
@@ -27,7 +25,7 @@ public class ConversationManager {
     public static ArrayList<Message> getConversation(String user, String recipient) {
         String filename = user + "-" + recipient + ".txt";
         Object lock = locks.get(filename);
-        synchronized(lock) {
+        synchronized (lock) {
             return conversations.get(filename);
         }
     }
@@ -46,9 +44,9 @@ public class ConversationManager {
             e.printStackTrace();
         }
 
-        synchronized(modifyLock) {
+        synchronized (modifyLock) {
             // Return if conversation is already opened. Done as a precaution
-            if(locks.get(filename) != null)
+            if (locks.get(filename) != null)
                 return;
 
             ArrayList<Message> conversation;
@@ -68,7 +66,7 @@ public class ConversationManager {
     }
 
     public static void closeConversation(String user, String recipient) {
-        
+
         String filename = user + "-" + recipient + ".txt";
         String reverseFile = recipient + "-" + user + ".txt";
         synchronized (modifyLock) {
@@ -90,7 +88,7 @@ public class ConversationManager {
     }
 
     public static void setConversation(String filename, ArrayList<Message> newConversation) {
-        synchronized(locks.get(filename)) {
+        synchronized (locks.get(filename)) {
             conversations.put(filename, newConversation);
         }
     }
@@ -100,7 +98,7 @@ public class ConversationManager {
         String recipientName = recipient.getUsername();
         String filename = userName + "-" + recipientName + ".txt";
         String reverseFile = recipientName + "-" + userName + ".txt";
-        synchronized(locks.get(filename)) {
+        synchronized (locks.get(filename)) {
             user.sendMessage(message, conversations.get(filename), conversations.get(reverseFile));
         }
     }
@@ -109,7 +107,7 @@ public class ConversationManager {
         String userName = user.getUsername();
         String recipientName = recipient.getUsername();
         String filename = userName + "-" + recipientName + ".txt";
-        synchronized(locks.get(filename)) {
+        synchronized (locks.get(filename)) {
             return user.deleteMessage(messageID, conversations.get(filename));
         }
     }
@@ -119,8 +117,9 @@ public class ConversationManager {
         String recipientName = recipient.getUsername();
         String filename = userName + "-" + recipientName + ".txt";
         String reverseFile = recipientName + "-" + userName + ".txt";
-        synchronized(locks.get(filename)) {
-            return user.editMessage(messageID, newMessage, conversations.get(filename), conversations.get(reverseFile), user, writer);
+        synchronized (locks.get(filename)) {
+            return user.editMessage(messageID, newMessage, conversations.get(filename),
+                    conversations.get(reverseFile), user, writer);
         }
     }
 
