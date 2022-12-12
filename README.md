@@ -184,7 +184,7 @@ Applicable Test Cases:
 - Test 1: User Register
 - Test 2: User Login
 - Test 3: Buyer messages Seller through Stores
-- Test 4: Buyer messeges Seller through Search
+- Test 4: Buyer messages Seller through Search
 - Test 5: Seller messages Buyer through List
 - Test 6: Seller messages Buyer through Search
 - Test 7: Buyer blocks Seller
@@ -207,9 +207,32 @@ Applicable Test Cases:
 
 #### Methods
 
-`static` - static intialization block that assigns the fields.
+`static` - static initialization block that assigns the fields.
 
-`getConversation` - takes in a String user and String recipient. 
+`getConversation` - takes in a String user and String recipient. Returns a conversation from conversations while synchronizing on the user's lock.
+
+`openConversation` - takes in a String user and String recipient. If the other is also messaging (has a lock), then only the user's lock is added.
+If the other user is not messaging, then both arraylists and the user's lock is added.
+
+`closeConversation` - takes in a String user and String recipient. If the other user is still messaging, only close the user's lock and write the user's messages to the file as a precaution.
+If the other user is not messaging, close both locks and remove both arraylists. Write both conversations to the files.
+
+`setConversation` - takes in String filename and ArrayList<Message> newConversation. Sets messages for the user in conversations while synchronizing on their lock.
+
+`sendMessage` - takes in a User user, User recipient, and String message. Wrapper for the sendMessage method of User.
+
+`deleteMessage` - takes in a User user, User recipient, and int messageID. Wrapper for the deleteMessage method of User.
+
+`editMessage` - takes in a User user, User recipient, int messageId, String newMessage, and PrintWriter writer. Wrapper for editMessage method of User.
+
+`readConversation` - takes in a String filename. Returns the corresponding arraylist of messages from the file.
+
+`writeConversation` = takes in a String filename. Writes that users messages to the corresponding file.
+
+#### Interactions
+
+Anywhere a message is being interacted with, ConversationManager is being used. It is specifically used extensively within 
+the main logic of `ApartmentsMessager`. It is used to keep track of a user's messages and allow for them to view, send, edit, and delete them. It also does this in a concurrent fashion uses Object locks so that multiple users can use the program at once.
 
 #### Testing
 
