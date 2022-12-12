@@ -33,9 +33,11 @@ public class AccountManager {
     // Returns the created user object with given user fields
     // Returns null if user already exists or username contains commas
     // Also adds user to accounts.txt and accounts/buyers/sellers arraylists
-    public static User register(String email, String username, String password, boolean isSeller, PrintWriter writer) {
+    public static User register(String email, String username, String password, boolean isSeller,
+                                PrintWriter writer) {
         if (findUser(username) != null) {
-            ServerProcessor.sendMessage(writer, "A user with this username already exists!", JOptionPane.ERROR_MESSAGE);
+            ServerProcessor.sendMessage(writer, "A user with this username already exists!",
+                    JOptionPane.ERROR_MESSAGE);
             return null;
         }
 

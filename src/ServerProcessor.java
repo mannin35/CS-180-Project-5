@@ -34,7 +34,8 @@ public class ServerProcessor {
         }
     }
 
-    public static String sendOptions(PrintWriter writer, BufferedReader reader, String message, String[] options) throws UserExitException {
+    public static String sendOptions(PrintWriter writer, BufferedReader reader, String message,
+                                     String[] options) throws UserExitException {
         String[] splitMessage = message.split("\n");
         int messageLines = splitMessage.length;
         String optionsString = String.join(",", options);
@@ -98,11 +99,7 @@ public class ServerProcessor {
         writer.flush();
         try {
             String result = reader.readLine();
-            if (result.equals("error")) {
-                return false;
-            } else {
-                return true;
-            }
+            return !result.equals("error");
         } catch (IOException e) {
             return false;
         }
