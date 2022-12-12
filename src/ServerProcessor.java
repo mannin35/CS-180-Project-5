@@ -88,7 +88,6 @@ public class ServerProcessor {
             writer.println(line);
         }
         writer.flush();
-        System.out.println("ExportSentToClient");
         try {
             String result = reader.readLine();
             if (result.equals("error")) {
