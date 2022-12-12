@@ -3,9 +3,9 @@
 ## Compilation
 
 If you are not using an IDE, clone the repository and run `javac *.java` to compile all the java files. Then,
-run `java ApartmentsMessager` to run the program.
+run `java ApartmentsMessager` to run the server and `java Client` to run a client instance.
 
-If you are using an IDE like IntelliJ, clone the repository within it and run the ApartmentsMessager file.
+If you are using an IDE like IntelliJ, clone the repository within it and run the ApartmentsMessager and Client files.
 
 ## Submission
 
@@ -100,7 +100,6 @@ where interactions with other classes occur. The class has two User object and t
 fields to keep track of the current user and their conversations. The class contains of object of itself to use these
 fields.
 
-
 #### Interactions
 
 The run method within `ApartmentsMessager` interacts with all the other classes in the projects (i.e
@@ -172,9 +171,16 @@ method will read in an int from the server which contains the messageType (which
 JOptionPane.INFORMATION_MESSAGE, JOptionPane.ERROR_MESSAGE, etc.). Then, the method showMessageDialog from
 the class JOptionPane is called using the message String Array and int messageType and this method returns true.
 
-`handleImport` - takes in a BufferedReader reader and PrintWriter writer First, this method sets a String filename to be the next line it receives from the server. If there is an IOException, this method returns false. Then, using this filename the contents of the file will be added to a String returnValue. The writer will print the returnValue to the server, or an empty String if any error occurs, returning true in either case.
+`handleImport` - takes in a BufferedReader reader and PrintWriter writer First, this method sets a String filename to be the next
+line it receives from the server. If there is an IOException, this method returns false. Then, using this filename the contents
+of the file will be added to a String returnValue. The writer will print the returnValue to the server, or an empty String
+if any error occurs, returning true in either case.
 
-`handleExport` - takes in a BufferedReader reader and PrintWriter writer. String actualFile is set to the next line received from the server. Then a String Array message is stored by calling getStringArray. If an IOException occured in the previous step, or if message is null, this method returns false. A new File and PrintWriter are created using actualFile as the file name, and then the contents of the String Array message are appended to the csv file. If an IOException occurs, the client sends "error" to the server. Otherwise it sends "no errors." The method then returns true.
+`handleExport` - takes in a BufferedReader reader and PrintWriter writer. String actualFile is set to the next line received
+from the server. Then a String Array message is stored by calling getStringArray. If an IOException occured in the previous step,
+or if message is null, this method returns false. A new File and PrintWriter are created using actualFile as the file name,
+and then the contents of the String Array message are appended to the csv file. If an IOException occurs, the client sends "error"
+to the server. Otherwise it sends "no errors." The method then returns true.
 #### Interactions
 
 This class will read in information from and print information to `ApartmentsMessager`.
@@ -188,7 +194,7 @@ Applicable Test Cases:
 - Test 1: User Register
 - Test 2: User Login
 - Test 3: Buyer messages Seller through Stores
-- Test 4: Buyer messeges Seller through Search
+- Test 4: Buyer messages Seller through Search
 - Test 5: Seller messages Buyer through List
 - Test 6: Seller messages Buyer through Search
 - Test 7: Buyer blocks Seller
@@ -211,9 +217,36 @@ Applicable Test Cases:
 
 #### Methods
 
-`static` - static intialization block that assigns the fields.
+`static` - static initialization block that assigns the fields.
 
-`getConversation` - takes in a String user and String recipient. 
+`getConversation` - takes in a String user and String recipient. Returns a conversation from conversations
+while synchronizing on the user's lock.
+
+`openConversation` - takes in a String user and String recipient. If the other is also messaging (has a lock),
+then only the user's lock is added.If the other user is not messaging, then both arraylists and the user's lock is added.
+
+`closeConversation` - takes in a String user and String recipient. If the other user is still messaging, only close
+the user's lock and write the user's messages to the file as a precaution.If the other user is not messaging, close both
+locks and remove both arraylists. Write both conversations to the files.
+
+`setConversation` - takes in String filename and ArrayList<Message> newConversation. Sets messages for the user in conversations
+while synchronizing on their lock.
+
+`sendMessage` - takes in a User user, User recipient, and String message. Wrapper for the sendMessage method of User.
+
+`deleteMessage` - takes in a User user, User recipient, and int messageID. Wrapper for the deleteMessage method of User.
+
+`editMessage` - takes in a User user, User recipient, int messageId, String newMessage, and PrintWriter writer. Wrapper for editMessage method of User.
+
+`readConversation` - takes in a String filename. Returns the corresponding arraylist of messages from the file.
+
+`writeConversation` = takes in a String filename. Writes that users messages to the corresponding file.
+
+#### Interactions
+
+Anywhere a message is being interacted with, ConversationManager is being used. It is specifically used extensively within 
+the main logic of `ApartmentsMessager`. It is used to keep track of a user's messages and allow for them to view, send, edit,
+and delete them. It also does this in a concurrent fashion uses Object locks so that multiple users can use the program at once.
 
 #### Testing
 
@@ -228,6 +261,7 @@ Applicable Test Cases:
 - Test 13: Buyer edits message to Seller
 - Test 14: Seller deletes message to Buyer
 
+
 ### ResourceManager
 
 #### Methods
@@ -240,18 +274,26 @@ Applicable Test Cases:
 
 `size` - returns the size of the list, done within a synchronized block using Object listLock.
 
-`remove` - takes in an element T and attempts to remove it from the list. If successful, returns true. Otherwise returns false. This is done within a synchronized block using Object listLock.
+`remove` - takes in an element T and attempts to remove it from the list. If successful, returns true.
+Otherwise returns false. This is done within a synchronized block using Object listLock.
 
-`contains` - takes in an element T and returns whether or not the list contains that element. This is done within a synchronized block using Object listLock.
+`contains` - takes in an element T and returns whether or not the list contains that element.
+This is done within a synchronized block using Object listLock.
 
-`appendToFile` - takes in a String toAppend and appends it to the file named String filename, a class field. This is done within a synchronized block using Object fileLock.
+`appendToFile` - takes in a String toAppend and appends it to the file named String filename, a class field.
+This is done within a synchronized block using Object fileLock.
 
-`writeListToFile` - Synchronized using both fileLock and listLock, this method prints out the entire list, using the toString method for that list's type, to file with name filename.
+`writeListToFile` - Synchronized using both fileLock and listLock, this method prints out the entire list,
+using the toString method for that list's type, to file with name filename.
 
-`readFile` - returns an ArrayList of String by adding each line from File filename to said ArrayList. This is done within a synchronized block using Object fileLock.
+`readFile` - returns an ArrayList of String by adding each line from File filename to said ArrayList.
+This is done within a synchronized block using Object fileLock.
+
 #### Interactions  
 
-The instances of this class are initialized within `AccountManager` and then used repeatedly within `ApartmentsMessager` to access and change these resources.
+The instances of this class are initialized within `AccountManager` and then used repeatedly within `ApartmentsMessager`
+to access and change these resources.
+
 #### Testing
 
 - Test 2: User Login
@@ -275,7 +317,8 @@ arraylist of messages. Creates a csv file that stores all the information in the
 
 #### Interactions
 
-Used within `ApartmentsMessager` to allow the user to either import files for sending messages or export files for storing past conversations. Now uses the implementation from `ServerProcessor` and `Client` to do so.
+Used within `ApartmentsMessager` to allow the user to either import files for sending messages or export files for storing past conversations.
+Now uses the implementation from `ServerProcessor` and `Client` to do so.
 
 #### Testing
 
@@ -283,6 +326,7 @@ Applicable Test Cases:
 
 - Test 11: Seller imports '.txt' file
 - Test 12: Buyer exports '.txt' file
+
 
 ### Message
 
@@ -326,15 +370,19 @@ read from the client.
  `sendMessage` - takes in a PrintWriter writer, BufferedReader reader, and String message. First, this message prints out 
 a commandHeader, "message", to the client. Then, it prints all the lines of the message to the client. 
 
-`importFile` - takes in a PrintWriter writer, BufferedReader reader, and String filename. First sends "import" to the client, followed by the filename. Then it receives the contents of the imported file from Client and returns that String. If an IOException occurs, it returns an empty String.
+`importFile` - takes in a PrintWriter writer, BufferedReader reader, and String filename. First sends "import" to the client,
+followed by the filename. Then it receives the contents of the imported file from Client and returns that String.
+If an IOException occurs, it returns an empty String.
 
-`exportCSV` - takes in a PrintWriter writer, BufferedReader reader, String filename, and String csv. First sends "export" to the client, followed by the filename, int messageLines, and the lines from csv. Then it reads the next line from client. If this String is "error" or an IOException occurs, this method returns false. Otherwise it returns true.
+`exportCSV` - takes in a PrintWriter writer, BufferedReader reader, String filename, and String csv. First sends "export" to the client,
+followed by the filename, int messageLines, and the lines from csv. Then it reads the next line from client.
+If this String is "error" or an IOException occurs, this method returns false. Otherwise it returns true.
+
 #### Interactions
 
 The methods in ServerProcessor are public and static, and are used to faciliate communcation between `Client` and `ApartmentsMessager`.
 
 #### Testing
-
 
 Every test will implicitly test `ServerProcessor`, since the server will call methods from this class every time it needs to 
 commnicate with `Client`.
@@ -381,6 +429,7 @@ Applicable Test Cases:
 - Test 3: Buyer messages Seller through Stores
 - Test 15: Seller creates a Store
 
+
 ### User
 
 #### Methods
@@ -421,4 +470,17 @@ Applicable Test Cases:
 - Test 10: Seller becomes invisible to Buyer
 - Test 13: Buyer edits message to Seller
 - Test 14: Seller deletes message to Buyer
+
+
+### UserExitException
+
+#### Methods
+
+`UserExitException` - constructor that takes in an error message and calls the Exception constructor.
+
+#### Interactions
+
+The UserExitException class is a simple class that extends Exception. Its only use is to indicate when the user exits or cancels the program.
+It is thrown by the ServerProcessor methods when the client sends a null byte, and it is caught by a try block that encapsulates most of the 
+main program logic.
  

@@ -1,6 +1,17 @@
 import java.util.ArrayList;
 import java.io.*;
 
+/**
+ * Project 5 - Resource Manager
+ *
+ * This is the class that handles concurrency for all shared resources
+ *
+ * @author Nick Andry, Rei Manning, Lab Sec L15
+
+ * @version December 12, 2022
+ *
+ */
+
 public class ResourceManager<T> {
     private String filename;
     private Object fileLock;

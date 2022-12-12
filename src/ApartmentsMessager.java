@@ -8,11 +8,18 @@ import java.net.Socket;
 import java.util.*;
 import java.io.*;
 
-/*
-To do:
-1. When the User presses the 'X' button it needs to be handled [returns zero]; handled on 'Client.java'
-2. When the User wants to delete a message, BUT they click out and it gets returned as message with messageID 0; handled on 'Client.java'
-3. Discrepancy in showMessageDialog [ERROR_MESSAGE VS INFORMATION_MESSAGE]; fixed
+/**
+ * Project 5 - Apartments Messager
+ *
+ * This is the main class that holds the main program flow.
+ * This is also the server class
+ * This is where interactions with other parts of the program
+ * occur.
+ *
+ * @author Chloe Yao, Rei Manning, Arsh Batth Lab Sec L15
+ *
+ * @version December 12, 2022
+ *
  */
 
 public class ApartmentsMessager {

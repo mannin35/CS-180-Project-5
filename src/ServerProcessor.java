@@ -3,6 +3,17 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
+/**
+ * Project 5 - Server Processor
+ *
+ * This is the class that facilitates communication between the server and client classes
+ *
+ * @author Nick Andry, Lab Sec L15
+ *
+ * @version December 12, 2022
+ *
+ */
+
 public class ServerProcessor {
     public static String sendInput(PrintWriter writer, BufferedReader reader, String message) throws UserExitException {
         String[] splitMessage = message.split("\n");
