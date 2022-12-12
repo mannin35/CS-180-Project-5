@@ -53,8 +53,8 @@ user doesn't exist.
 
 #### Interactions
 
-There are three arraylists that are publicly accessible through their get methods. These are used by the
-ApartmentsMessager class.
+There are three arraylists that are publicly accessible through their get methods. These are used by
+`ApartmentsMessager`.
 
 * `accounts` - contains User objects that hold information about each user.
 * `buyers` - contains the usernames of all buyers.
@@ -64,6 +64,18 @@ ApartmentsMessager class.
 All the public methods within the class, such as `register` and `logIn` are used within the main
 program flow to interact with account information and retrieve User objects.
 
+#### Testing
+
+Applicable Test Cases:
+
+- Test 1: User Register
+- Test 2: User Login
+- Test 16: User does not exist for Login
+- Test 17: User registers with comma
+- Test 18: User registers with existing username
+- Test 19: User logs in with incorrect password
+- Test 20: User does not enter buyer or seller when Registering
+
 
 ### ApartmentsMessager
 
@@ -72,7 +84,7 @@ program flow to interact with account information and retrieve User objects.
 `ApartmentsMessager` - constructor that takes no arguments and initializes fields to be used in program flow.
 
 `main` - creates the server socket, then connects all client sockets and creates a new thread for each socket. This 
-is where the inner class ClientHandler is created.
+is where the inner class `ClientHandler` is created.
 
 `readConversation` - takes in an ApartmentsMessager object and a filename. Reads the file and updates the
 conversation arraylists of Messages.
@@ -91,21 +103,48 @@ fields.
 
 #### Interactions
 
-The run method within ApartmentsMessager interacts with all the other classes in the projects (i.e
+The run method within `ApartmentsMessager` interacts with all the other classes in the projects (i.e
 Store, User, AccountManager, Message, FileImportExport, Client, ConversationManager, ServerProcessor, 
 and ResourceManager.)
+
+#### Testing
+
+Every test will implicitly test `ApartmentsMessager`, since this class is where the server is located.
+
+Applicable Test Cases:
+
+- Test 1: User Register
+- Test 2: User Login
+- Test 3: Buyer messages Seller through Stores
+- Test 4: Buyer messeges Seller through Search
+- Test 5: Seller messages Buyer through List
+- Test 6: Seller messages Buyer through Search
+- Test 7: Buyer blocks Seller
+- Test 8: Buyer becomes invisible to Seller
+- Test 9: Seller blocks Buyer
+- Test 10: Seller becomes invisible to Buyer
+- Test 11: Seller imports '.txt' file
+- Test 12: Buyer exports '.txt' file
+- Test 13: Buyer edits message to Seller
+- Test 14: Seller deletes message to Buyer
+- Test 15: Seller creates a Store
+- Test 16: User does not exist for Login
+- Test 17: User registers with comma
+- Test 18: User registers with existing username
+- Test 19: User logs in with incorrect password
+- Test 20: User does not enter buyer or seller when Registering
 
 
 ### Client
 
 #### Methods
 
-`main` - creates a Socket, PrintWriter, and BufferedReader, all of which connect with the server, ApartmentsMessager.
+`main` - creates a Socket, PrintWriter, and BufferedReader, all of which connect with the server, `ApartmentsMessager`.
 Then, it runs an infinite loop that takes input from the server. Each time it recieves an input, it calls the 
 processCommand method.
 
 `createErrorMessage` - takes in a String message and displays it using GUI. This method is called whenever an error
-ocurrs in the Client class.
+ocurrs in `Client`.
 
 `processCommand` - takes in a String commandHeader, BufferedReader reader, and PrintWriter writer. Inside this method
 is a swwitch statement, which has three different cases based on the commandHeader: "message", "options", and "input". 
@@ -135,7 +174,35 @@ the class JOptionPane is called using the message String Array and int messageTy
 
 #### Interactions
 
-This class will read in information from and print information to the ApartmentsMessager class.
+This class will read in information from and print information to `ApartmentsMessager`.
+
+#### Testing
+
+Every test will implicitly test `Client`, since this class will constantly be interacting with the server.
+
+Applicable Test Cases:
+
+- Test 1: User Register
+- Test 2: User Login
+- Test 3: Buyer messages Seller through Stores
+- Test 4: Buyer messeges Seller through Search
+- Test 5: Seller messages Buyer through List
+- Test 6: Seller messages Buyer through Search
+- Test 7: Buyer blocks Seller
+- Test 8: Buyer becomes invisible to Seller
+- Test 9: Seller blocks Buyer
+- Test 10: Seller becomes invisible to Buyer
+- Test 11: Seller imports '.txt' file
+- Test 12: Buyer exports '.txt' file
+- Test 13: Buyer edits message to Seller
+- Test 14: Seller deletes message to Buyer
+- Test 15: Seller creates a Store
+- Test 16: User does not exist for Login
+- Test 17: User registers with comma
+- Test 18: User registers with existing username
+- Test 19: User logs in with incorrect password
+- Test 20: User does not enter buyer or seller when Registering
+
 
 ### ConversationManager
 
@@ -145,6 +212,18 @@ This class will read in information from and print information to the Apartments
 
 `getConversation` - takes in a String user and String recipient. 
 
+#### Testing
+
+Applicable Test Cases:
+
+- Test 3: Buyer messages Seller through Stores
+- Test 4: Buyer messeges Seller through Search
+- Test 5: Seller messages Buyer through List
+- Test 6: Seller messages Buyer through Search
+- Test 11: Seller imports '.txt' file
+- Test 12: Buyer exports '.txt' file
+- Test 13: Buyer edits message to Seller
+- Test 14: Seller deletes message to Buyer
 
 ### FileImportExport
 
@@ -157,8 +236,15 @@ arraylist of messages. Creates a csv file that stores all the information in the
 
 #### Interactions
 
-Used within ApartmentsMessager to allow the user to either import files for sending messages or export
+Used within `ApartmentsMessager` to allow the user to either import files for sending messages or export
 files for storing past conversations.
+
+#### Testing
+
+Applicable Test Cases:
+
+- Test 11: Seller imports '.txt' file
+- Test 12: Buyer exports '.txt' file
 
 ### Message
 
@@ -172,6 +258,19 @@ values. There is another version that does not take in a timestamp.
 
 The message object is used throughout the program to encapsulate all the data a message has in a single object.
 It's getters, setters, and toString method are used heavily to retrieve pieces of information about a given message.
+
+#### Testing
+
+Applicable Test Cases:
+
+- Test 3: Buyer messages Seller through Stores
+- Test 4: Buyer messeges Seller through Search
+- Test 5: Seller messages Buyer through List
+- Test 6: Seller messages Buyer through Search
+- Test 11: Seller imports '.txt' file
+- Test 12: Buyer exports '.txt' file
+- Test 13: Buyer edits message to Seller
+- Test 14: Seller deletes message to Buyer
 
 
 ### ServerProcessor
@@ -191,7 +290,37 @@ a commandHeader, "message", to the client. Then, it prints all the lines of the 
 
 #### Interactions
 
-The methods in ServerProcessor are public and static, and are used to faciliate communcation between the Client class and ApartmentsMessager class.
+The methods in ServerProcessor are public and static, and are used to faciliate communcation between `Client` and `ApartmentsMessager`.
+
+#### Testing
+
+
+Every test will implicitly test `ServerProcessor`, since the server will call methods from this class every time it needs to 
+commnicate with `Client`.
+
+Applicable Test Cases:
+
+- Test 1: User Register
+- Test 2: User Login
+- Test 3: Buyer messages Seller through Stores
+- Test 4: Buyer messeges Seller through Search
+- Test 5: Seller messages Buyer through List
+- Test 6: Seller messages Buyer through Search
+- Test 7: Buyer blocks Seller
+- Test 8: Buyer becomes invisible to Seller
+- Test 9: Seller blocks Buyer
+- Test 10: Seller becomes invisible to Buyer
+- Test 11: Seller imports '.txt' file
+- Test 12: Buyer exports '.txt' file
+- Test 13: Buyer edits message to Seller
+- Test 14: Seller deletes message to Buyer
+- Test 15: Seller creates a Store
+- Test 16: User does not exist for Login
+- Test 17: User registers with comma
+- Test 18: User registers with existing username
+- Test 19: User logs in with incorrect password
+- Test 20: User does not enter buyer or seller when Registering
+
 
 ### Store
 
@@ -203,6 +332,13 @@ The methods in ServerProcessor are public and static, and are used to faciliate 
 
 It is used whenever the program interacts with stores to encapsulate their data. The getters and toString method are
 utilized.
+
+#### Testing
+
+Applicable Test Cases:
+
+- Test 3: Buyer messages Seller through Stores
+- Test 15: Seller creates a Store
 
 ### User
 
@@ -233,4 +369,15 @@ of the current user.
 The User class is used extensively throughout the program. Since it encapsulates all the information pertaining
 to a user, a User object can be passed around to have its data modified or retrieved. The getters are used
 heavily, as well as the toString method for writing to files.
+
+#### Testing 
+
+Applicable Test Cases:
+
+- Test 7: Buyer blocks Seller
+- Test 8: Buyer becomes invisible to Seller
+- Test 9: Seller blocks Buyer
+- Test 10: Seller becomes invisible to Buyer
+- Test 13: Buyer edits message to Seller
+- Test 14: Seller deletes message to Buyer
  
