@@ -252,7 +252,6 @@ public class Client {
     }
 
     private boolean handleExport(BufferedReader reader, PrintWriter writer) {
-        System.out.println("HandleExport");
         String actualFile = "";
         try {
             actualFile = reader.readLine();
@@ -266,7 +265,6 @@ public class Client {
         
         File csvFile = new File(actualFile);
         try {
-            System.out.println("Printing to csv");
             PrintWriter pw = new PrintWriter(new FileOutputStream(csvFile, true));
             for (String line : message) {
                 pw.println(line);

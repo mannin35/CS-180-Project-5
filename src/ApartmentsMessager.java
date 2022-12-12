@@ -252,8 +252,14 @@ public class ApartmentsMessager {
                                                             "Would you like to:",
                                                             new String[]{"Send a message", "Send a file"});
                                                     if (messageType.equals("1")) {
-                                                        String newMessage = ServerProcessor.sendInput(writer, reader,
+                                                        String newMessage = "";
+                                                        while (newMessage.equals("") || newMessage == null) {
+                                                            newMessage = ServerProcessor.sendInput(writer, reader,
                                                                 "Please enter the message you would like to enter");
+                                                            if (newMessage.equals("") || newMessage == null) {
+                                                                ServerProcessor.sendMessage(writer, "Messages cannot be empty!", JOptionPane.ERROR_MESSAGE);
+                                                            }
+                                                        }
                                                         ConversationManager.sendMessage(main.currentUser, main.recipient, newMessage);
                                                     } else if (messageType.equals("2")) {
                                                         String fileMessage = "";
@@ -540,7 +546,14 @@ public class ApartmentsMessager {
                                                             new String[] {"1", "2"});
                                                     //send new message by typing input
                                                     if (messageType.equals("1")) {
-                                                        String newMessage = ServerProcessor.sendInput(writer, reader, "Please enter the message you would like to enter");
+                                                        String newMessage = "";
+                                                        while (newMessage.equals("") || newMessage == null) {
+                                                            newMessage = ServerProcessor.sendInput(writer, reader,
+                                                                "Please enter the message you would like to enter");
+                                                            if (newMessage.equals("") || newMessage == null) {
+                                                                ServerProcessor.sendMessage(writer, "Messages cannot be empty!", JOptionPane.ERROR_MESSAGE);
+                                                            }
+                                                        }
                                                         ConversationManager.sendMessage(main.currentUser, main.recipient, newMessage);
                                                         //send message by importing file
                                                     } else if (messageType.equals("2")) {

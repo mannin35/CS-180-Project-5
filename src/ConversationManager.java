@@ -57,6 +57,7 @@ public class ConversationManager {
     }
 
     public static void closeConversation(String user, String recipient) {
+        
         String filename = user + "-" + recipient + ".txt";
         String reverseFile = recipient + "-" + user + ".txt";
         synchronized (modifyLock) {
