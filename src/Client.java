@@ -8,7 +8,6 @@ import java.util.ArrayList;
  *
  * This is the client class that interacts with the server
  *
- *
  * @author Nick Andry, Chloe Yao Lab Sec L15
  *
  * @version December 12, 2022

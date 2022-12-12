@@ -6,13 +6,14 @@ import java.util.Arrays;
 
 /**
  * Project 5 - Account Manager
- * <p>
+ *
  * Class that implements methods for logging in/registering a user,
  * as well as some helper methods for finding users. Some fields are also
  * here that are used in other parts of the program, like accounts, buyers,
  * seller, and stores.
  *
  * @author Nick Andry, Lab Sec L15
+ *
  * @version December 12, 2022
  */
 public class AccountManager {
