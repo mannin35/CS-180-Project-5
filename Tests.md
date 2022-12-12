@@ -58,7 +58,7 @@ Steps:
 13. Check ‘testBuyer-testSeller.txt’ file to see if message is sent  
 Test 3 Status: PASSED
 
-Test 4: Buyer messages Seller through List  
+Test 4: Buyer messages Seller through Search  
 Steps:
 1. Create a Seller
 2. Seller selects 2 for ‘Create a Store’
@@ -68,7 +68,7 @@ Steps:
 6. Buyer selects 1 for ‘Message a Seller’
 7. Buyer selects 2 for ‘Search for a Seller’
 8. Buyer enters ‘testSeller’
-9.Buyer selects 2 for ‘Send a new message’
+9. Buyer selects 2 for ‘Send a new message’
 10. Buyer selects 1 for ‘Send a message’
 11. Buyer enters ‘hello’
 12. EXIT by pressing ‘X’
