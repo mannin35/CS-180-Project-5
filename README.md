@@ -9,7 +9,7 @@ If you are using an IDE like IntelliJ, clone the repository within it and run th
 
 ## Submission
 
-Arsh Batth - Submitted report on Brightspace
+Arsh Batth - Submitted report and presentation on Brightspace
 
 Nick Andry - Submitted Vocareum workspace
 
