@@ -1,13 +1,13 @@
 import java.util.*;
 
 /**
- * Project 4 - src.Store
+ * Project 5 - src.Store
  * <p>
  * Encapsulates all the information a store has so that it
  * can be manipulated during runtime and written back to files.
  *
  * @author Rei Manning, Lab Sec L15
- * @version November 14th, 2022
+ * @version December 12, 2022
  */
 public class Store {
     private String seller;

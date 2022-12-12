@@ -2,14 +2,14 @@
 import java.sql.Timestamp;
 import java.time.Instant;
 /**
- * Project 4 - Message
+ * Project 5 - Message
  *
  * Encapsulates all the information a message has so that it
  * can be manipulated during runtime and written back to files.
  *
  * @author Arsh Batth, Lab Sec L15
  *
- * @version November 13th, 2022
+ * @version December 12, 2022
  */
 
 public class Message {

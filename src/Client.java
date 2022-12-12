@@ -3,6 +3,18 @@ import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 
+/**
+ * Project 5 - Client
+ *
+ * This is the client class that interacts with the server
+ *
+ *
+ * @author Nick Andry, Chloe Yao Lab Sec L15
+ *
+ * @version December 12, 2022
+ *
+ */
+
 public class Client {
 
     public static Socket socket;
