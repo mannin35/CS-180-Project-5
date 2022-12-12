@@ -204,7 +204,8 @@ public class ApartmentsMessager {
                                                     ServerProcessor.sendMessage(writer, "Please enter a user " +
                                                             "from the" +
                                                             " list", JOptionPane.ERROR_MESSAGE);
-                                                } else if (main.recipient.getBlocked().contains(main.currentUser.getUsername())) {
+                                                } else if (main.recipient.getBlocked()
+                                                        .contains(main.currentUser.getUsername())) {
                                                     String errorMessage = "You have been blocked by " +
                                                             main.recipient.getUsername() + " and may not message" +
                                                             " them";
@@ -227,7 +228,8 @@ public class ApartmentsMessager {
                                                         buyerChoice;
                                                 ServerProcessor.sendMessage(writer, nonexistentUser,
                                                         JOptionPane.ERROR_MESSAGE);
-                                            } else if (main.recipient.getBlocked().contains(main.currentUser.getUsername())) {
+                                            } else if (main.recipient.getBlocked()
+                                                    .contains(main.currentUser.getUsername())) {
                                                 String errorMessage = "You have been blocked by " +
                                                         main.recipient.getUsername() + " and may not message them";
                                                 ServerProcessor.sendMessage(writer, errorMessage,
@@ -252,9 +254,11 @@ public class ApartmentsMessager {
                                         ServerProcessor.sendMessage(writer, recipientMessage,
                                                 JOptionPane.PLAIN_MESSAGE);
                                         String messageName =
-                                                main.currentUser.getUsername() + "-" + main.recipient.getUsername() + ".txt";
+                                                main.currentUser.getUsername() + "-" +
+                                                        main.recipient.getUsername() + ".txt";
                                         String recipientMessageName =
-                                                main.recipient.getUsername() + "-" + main.currentUser.getUsername() + ".txt";
+                                                main.recipient.getUsername() + "-" +
+                                                        main.currentUser.getUsername() + ".txt";
 
                                         //Message Menu
                                         while (true) {
@@ -340,7 +344,8 @@ public class ApartmentsMessager {
                                                         messageHistory += main.getCurrentConvo().get(i);
                                                         messageHistory += "\n";
                                                     }
-                                                    messageHistory += main.getCurrentConvo().get(main.getCurrentConvo().size() - 1);
+                                                    messageHistory += main.getCurrentConvo()
+                                                            .get(main.getCurrentConvo().size() - 1);
                                                     messageHistory += "\n";
                                                     boolean messageEdited = false;
                                                     int messageID = -1;
@@ -402,7 +407,8 @@ public class ApartmentsMessager {
                                                         messageHistory += main.getCurrentConvo().get(i);
                                                         messageHistory += "\n";
                                                     }
-                                                    messageHistory += main.getCurrentConvo().get(main.getCurrentConvo().size() - 1);
+                                                    messageHistory += main.getCurrentConvo()
+                                                            .get(main.getCurrentConvo().size() - 1);
                                                     messageHistory += "\n";
                                                     boolean messageDeleted = false;
                                                     int messageID = -1;
@@ -570,7 +576,8 @@ public class ApartmentsMessager {
                                                 String storeListString = "";
                                                 for (int i = 0; i < AccountManager.stores.size(); i++) {
                                                     storeListString =
-                                                            storeListString + AccountManager.stores.get(i).getName() + "\n";
+                                                            storeListString + AccountManager.stores
+                                                                    .get(i).getName() + "\n";
                                                 }
                                                 ServerProcessor.sendMessage(writer, storeListString,
                                                         JOptionPane.PLAIN_MESSAGE);
@@ -581,9 +588,11 @@ public class ApartmentsMessager {
                                                     // matches
                                                     // the search. THen, gets the seller who owns that store
                                                     for (int i = 0; i < AccountManager.stores.size(); i++) {
-                                                        if (AccountManager.stores.get(i).getName().equalsIgnoreCase(storeChoice)) {
+                                                        if (AccountManager.stores.get(i).getName()
+                                                                .equalsIgnoreCase(storeChoice)) {
                                                             main.setRecipient(AccountManager
-                                                                    .getUserFromUsername(AccountManager.stores.get(i).getSeller()));
+                                                                    .getUserFromUsername(AccountManager.stores
+                                                                            .get(i).getSeller()));
                                                         }
                                                     }
                                                     if (main.recipient == null) {
@@ -616,7 +625,8 @@ public class ApartmentsMessager {
                                                         " with" +
                                                         " the username "
                                                         + sellerChoice, JOptionPane.ERROR_MESSAGE);
-                                            } else if (main.recipient.getBlocked().contains(main.currentUser.getUsername())) {
+                                            } else if (main.recipient.getBlocked()
+                                                    .contains(main.currentUser.getUsername())) {
                                                 ServerProcessor.sendMessage(writer, "You have been blocked by " +
                                                                 main.recipient.getUsername() + " and may not " +
                                                                 "message " +
