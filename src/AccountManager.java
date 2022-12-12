@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * Project 4 - Account Manager
+ * Project 5 - Account Manager
  * <p>
  * Class that implements methods for logging in/registering a user,
  * as well as some helper methods for finding users. Some fields are also
@@ -13,7 +13,7 @@ import java.util.Arrays;
  * seller, and stores.
  *
  * @author Nick Andry, Lab Sec L15
- * @version November 13, 2022
+ * @version December 12, 2022
  */
 public class AccountManager {
     public static ResourceManager<User> accounts;

@@ -1,6 +1,17 @@
 import java.io.*;
 import java.util.*;
 
+/**
+ * Project 5 - Conversation Manager
+ *
+ * This is the class that handles concurrency for methods and resources regarding conversations
+ *
+ * @author Nick Andry, Rei Manning, Lab Sec L15
+ *
+ * @version December 12, 2022
+ *
+ */
+
 public class ConversationManager {
     private static HashMap<String, ArrayList<Message>> conversations;
     private static HashMap<String, Object> locks;
