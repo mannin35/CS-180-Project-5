@@ -3,9 +3,9 @@
 ## Compilation
 
 If you are not using an IDE, clone the repository and run `javac *.java` to compile all the java files. Then,
-run `java ApartmentsMessager` to run the program.
+run `java ApartmentsMessager` to run the server and `java Client` to run a client instance.
 
-If you are using an IDE like IntelliJ, clone the repository within it and run the ApartmentsMessager file.
+If you are using an IDE like IntelliJ, clone the repository within it and run the ApartmentsMessager and Client files.
 
 ## Submission
 
@@ -99,7 +99,6 @@ conversation arraylists of Messages.
 where interactions with other classes occur. The class has two User object and two arraylists of Message objects as 
 fields to keep track of the current user and their conversations. The class contains of object of itself to use these
 fields.
-
 
 #### Interactions
 
@@ -225,6 +224,7 @@ Applicable Test Cases:
 - Test 13: Buyer edits message to Seller
 - Test 14: Seller deletes message to Buyer
 
+
 ### FileImportExport
 
 #### Methods
@@ -245,6 +245,7 @@ Applicable Test Cases:
 
 - Test 11: Seller imports '.txt' file
 - Test 12: Buyer exports '.txt' file
+
 
 ### Message
 
@@ -294,7 +295,6 @@ The methods in ServerProcessor are public and static, and are used to faciliate 
 
 #### Testing
 
-
 Every test will implicitly test `ServerProcessor`, since the server will call methods from this class every time it needs to 
 commnicate with `Client`.
 
@@ -340,6 +340,7 @@ Applicable Test Cases:
 - Test 3: Buyer messages Seller through Stores
 - Test 15: Seller creates a Store
 
+
 ### User
 
 #### Methods
@@ -380,4 +381,17 @@ Applicable Test Cases:
 - Test 10: Seller becomes invisible to Buyer
 - Test 13: Buyer edits message to Seller
 - Test 14: Seller deletes message to Buyer
+
+
+### UserExitException
+
+#### Methods
+
+`UserExitException` - constructor that takes in an error message and calls the Exception constructor.
+
+#### Interactions
+
+The UserExitException class is a simple class that extends Exception. Its only use is to indicate when the user exits or cancels the program.
+It is thrown by the ServerProcessor methods when the client sends a null byte, and it is caught by a try block that encapsulates most of the 
+main program logic.
  
