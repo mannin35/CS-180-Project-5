@@ -172,6 +172,9 @@ method will read in an int from the server which contains the messageType (which
 JOptionPane.INFORMATION_MESSAGE, JOptionPane.ERROR_MESSAGE, etc.). Then, the method showMessageDialog from
 the class JOptionPane is called using the message String Array and int messageType and this method returns true.
 
+`handleImport` - takes in a BufferedReader reader and PrintWriter writer First, this method sets a String filename to be the next line it receives from the server. If there is an IOException, this method returns false. Then, using this filename the contents of the file will be added to a String returnValue. The writer will print the returnValue to the server, or an empty String if any error occurs, returning true in either case.
+
+`handleExport` - takes in a BufferedReader reader and PrintWriter writer. String actualFile is set to the next line received from the server. Then a String Array message is stored by calling getStringArray. If an IOException occured in the previous step, or if message is null, this method returns false. A new File and PrintWriter are created using actualFile as the file name, and then the contents of the String Array message are appended to the csv file. If an IOException occurs, the client sends "error" to the server. Otherwise it sends "no errors." The method then returns true.
 #### Interactions
 
 This class will read in information from and print information to `ApartmentsMessager`.
@@ -236,8 +239,7 @@ arraylist of messages. Creates a csv file that stores all the information in the
 
 #### Interactions
 
-Used within `ApartmentsMessager` to allow the user to either import files for sending messages or export
-files for storing past conversations.
+Used within `ApartmentsMessager` to allow the user to either import files for sending messages or export files for storing past conversations. Now uses the implementation from `ServerProcessor` and `Client` to do so.
 
 #### Testing
 
@@ -288,6 +290,9 @@ read from the client.
  `sendMessage` - takes in a PrintWriter writer, BufferedReader reader, and String message. First, this message prints out 
 a commandHeader, "message", to the client. Then, it prints all the lines of the message to the client. 
 
+`importFile` - takes in a PrintWriter writer, BufferedReader reader, and String filename. First sends "import" to the client, followed by the filename. Then it receives the contents of the imported file from Client and returns that String. If an IOException occurs, it returns an empty String.
+
+`exportCSV` - takes in a PrintWriter writer, BufferedReader reader, String filename, and String csv. First sends "export" to the client, followed by the filename, int messageLines, and the lines from csv. Then it reads the next line from client. If this String is "error" or an IOException occurs, this method returns false. Otherwise it returns true.
 #### Interactions
 
 The methods in ServerProcessor are public and static, and are used to faciliate communcation between `Client` and `ApartmentsMessager`.
