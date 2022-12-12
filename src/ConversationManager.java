@@ -13,7 +13,7 @@ import java.util.*;
 public class ConversationManager {
     private static HashMap<String, ArrayList<Message>> conversations;
     private static HashMap<String, Object> locks;
-    private static final Object modifyLock;
+    private static Object modifyLock;
 
 
     static {
@@ -112,7 +112,8 @@ public class ConversationManager {
         }
     }
 
-    public static boolean editMessage(User user, User recipient, int messageID, String newMessage, PrintWriter writer) {
+    public static boolean editMessage(User user, User recipient, int messageID, String newMessage,
+                                      PrintWriter writer) {
         String userName = user.getUsername();
         String recipientName = recipient.getUsername();
         String filename = userName + "-" + recipientName + ".txt";
